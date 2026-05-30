@@ -5,11 +5,13 @@ import { FACE_ORDER, FACE_BG, FACE_TEXT, FACE_SUBLABEL } from './types/cube'
 import FaceGrid from './components/FaceGrid.vue'
 import SolutionPanel from './components/SolutionPanel.vue'
 import SavedConfigs from './components/SavedConfigs.vue'
+import HeaderLinks from './components/HeaderLinks.vue'
+import ValidationChip from './components/ValidationChip.vue'
 import { useCube } from './composables/useCube'
 import { useSolver } from './composables/useSolver'
 import { useSavedConfigs } from './composables/useSavedConfigs'
 
-const { faces, setCell, resetAll, toKociemba, fromKociemba, validation } = useCube()
+const { faces, setCell, resetAll, toKociemba, fromKociemba, validation, colorCounts } = useCube()
 const { solve, solving, rawSolution, solveError, steps, clear } = useSolver()
 const { configs, save, remove, rename, exportJson, importJson } = useSavedConfigs()
 
@@ -125,7 +127,13 @@ async function handleImport(file: File) {
 
     <!-- Header -->
     <header>
-      <h1>Кубик Рубика</h1>
+      <div class="header-top">
+        <div class="header-icon">
+          <img src="/favicon.svg" width="36" height="36" alt="cube" />
+        </div>
+        <h1>Кубик Рубика</h1>
+        <HeaderLinks class="header-links" />
+      </div>
       <p class="hint">
         Держи куб: <strong>белый верх</strong>, <strong>зелёный к тебе</strong>.
         Кликай клетки, чтобы покрасить. Наводи — увидишь цвет.
@@ -195,9 +203,11 @@ async function handleImport(file: File) {
       <button class="btn btn-ghost" @click="handleReset">↺ Сброс</button>
       <button class="btn btn-scramble" @click="handleScramble">🎲 Скрамбл</button>
 
-      <div class="validation-chip" :class="validation.ok ? 'ok' : 'err'">
-        {{ validation.msg }}
-      </div>
+      <ValidationChip
+        :ok="validation.ok"
+        :msg="validation.msg"
+        :color-counts="colorCounts"
+      />
 
       <button
         class="btn btn-save"
@@ -261,8 +271,23 @@ async function handleImport(file: File) {
 
 header { text-align: center; }
 
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+}
+
+.header-links {
+  position: absolute;
+  right: 0;
+}
+
+.header-icon { flex-shrink: 0; }
+
 h1 {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.04em;
   background: linear-gradient(135deg, #f0f0f0, #aaa);
@@ -271,7 +296,7 @@ h1 {
   background-clip: text;
 }
 
-.hint { color: #555; font-size: 13px; margin-top: 6px; }
+.hint { color: #555; font-size: 13px; margin-top: 8px; }
 .hint strong { color: #888; }
 
 /* ── Палитра ── */
@@ -346,14 +371,6 @@ h1 {
 .btn-save     { background: #2a2a2a; color: #4895ef; border: 1px solid #444; }
 .btn-primary  { background: #e63946; color: #fff; }
 
-.validation-chip {
-  font-size: 13px;
-  padding: 7px 14px;
-  border-radius: 20px;
-  font-weight: 500;
-}
-.validation-chip.ok  { background: rgba(45,198,83,0.12);  color: #2dc653; }
-.validation-chip.err { background: rgba(230,57,70,0.12);  color: #e63946; }
 
 .error-box {
   background: rgba(230,57,70,0.1);

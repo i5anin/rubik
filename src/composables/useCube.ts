@@ -64,5 +64,15 @@ export function useCube() {
     }
   }
 
-  return { faces, setCell, resetFace, resetAll, toKociemba, fromKociemba, validation }
+  /** Сколько раз встречается каждый цвет */
+  const colorCounts = computed(() => {
+    const s = toKociemba()
+    const res = {} as Record<FaceLetter, number>
+    for (const face of FACE_ORDER) {
+      res[face] = [...s].filter(c => c === face).length
+    }
+    return res
+  })
+
+  return { faces, setCell, resetFace, resetAll, toKociemba, fromKociemba, validation, colorCounts }
 }

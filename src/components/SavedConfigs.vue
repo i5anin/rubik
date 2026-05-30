@@ -7,10 +7,13 @@ const emit = defineEmits<{
   (e: 'load', state: string): void
   (e: 'remove', id: string): void
   (e: 'rename', id: string, name: string): void
+  (e: 'export'): void
+  (e: 'import', file: File): void
 }>()
 
 const editingId = ref<string | null>(null)
 const editingName = ref('')
+const fileInput = ref<HTMLInputElement | null>(null)
 
 function startEdit(c: SavedConfig) {
   editingId.value = c.id
@@ -18,24 +21,54 @@ function startEdit(c: SavedConfig) {
 }
 
 function commitEdit(id: string) {
-  if (editingName.value.trim()) {
-    emit('rename', id, editingName.value.trim())
-  }
+  if (editingName.value.trim()) emit('rename', id, editingName.value.trim())
   editingId.value = null
+}
+
+function triggerImport() {
+  fileInput.value?.click()
+}
+
+function onFileChange(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (file) emit('import', file)
+  ;(e.target as HTMLInputElement).value = ''
 }
 </script>
 
 <template>
-  <div class="saved" v-if="configs.length">
+  <div class="saved">
+    <!-- Заголовок + кнопки экспорт/импорт -->
     <div class="saved-header">
-      <span class="saved-title">Сохранённые</span>
-      <span class="saved-count">{{ configs.length }}</span>
+      <div class="saved-title-wrap">
+        <span class="saved-title">Сохранённые</span>
+        <span v-if="configs.length" class="saved-count">{{ configs.length }}</span>
+      </div>
+      <div class="io-btns">
+        <button
+          class="io-btn"
+          :disabled="!configs.length"
+          title="Скачать все конфиги как .json"
+          @click="emit('export')"
+        >
+          ⬇ Экспорт
+        </button>
+        <button class="io-btn io-import" title="Загрузить конфиги из .json" @click="triggerImport">
+          ⬆ Импорт
+        </button>
+        <input
+          ref="fileInput"
+          type="file"
+          accept=".json"
+          style="display:none"
+          @change="onFileChange"
+        />
+      </div>
     </div>
 
-    <div class="saved-list">
+    <!-- Список -->
+    <div v-if="configs.length" class="saved-list">
       <div v-for="c in configs" :key="c.id" class="saved-item">
-
-        <!-- Имя / редактирование -->
         <div class="saved-name-wrap">
           <input
             v-if="editingId === c.id"
@@ -45,26 +78,23 @@ function commitEdit(id: string) {
             @blur="commitEdit(c.id)"
             autofocus
           />
-          <span v-else class="saved-name" @dblclick="startEdit(c)">
+          <span v-else class="saved-name" @dblclick="startEdit(c)" title="Двойной клик — переименовать">
             {{ c.name }}
           </span>
           <span class="saved-date">{{ c.savedAt }}</span>
         </div>
 
-        <!-- Кнопки -->
         <div class="saved-actions">
-          <button class="act-btn act-load" @click="emit('load', c.state)" title="Загрузить">
-            ↩
-          </button>
-          <button class="act-btn act-edit" @click="startEdit(c)" title="Переименовать">
-            ✏
-          </button>
-          <button class="act-btn act-del" @click="emit('remove', c.id)" title="Удалить">
-            ✕
-          </button>
+          <button class="act-btn act-load" @click="emit('load', c.state)" title="Загрузить на куб">↩</button>
+          <button class="act-btn act-edit" @click="startEdit(c)" title="Переименовать">✏</button>
+          <button class="act-btn act-del" @click="emit('remove', c.id)" title="Удалить">✕</button>
         </div>
-
       </div>
+    </div>
+
+    <div v-else class="empty-hint">
+      Нет сохранённых конфигураций.<br/>
+      Нажми <strong>💾 Сохранить</strong> после ввода куба.
     </div>
   </div>
 </template>
@@ -80,8 +110,15 @@ function commitEdit(id: string) {
 .saved-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 10px;
+}
+
+.saved-title-wrap {
+  display: flex;
+  align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
 }
 
 .saved-title {
@@ -98,6 +135,29 @@ function commitEdit(id: string) {
   border-radius: 20px;
 }
 
+/* Экспорт / Импорт */
+.io-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.io-btn {
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 7px;
+  color: #888;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: color 0.1s, border-color 0.1s;
+}
+
+.io-btn:hover:not(:disabled) { color: #ddd; border-color: #555; }
+.io-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.io-import:hover { color: #4895ef !important; border-color: #4895ef !important; }
+
+/* Список */
 .saved-list {
   display: flex;
   flex-direction: column;
@@ -117,10 +177,7 @@ function commitEdit(id: string) {
   border: 1px solid #2a2a2a;
   transition: border-color 0.15s;
 }
-
-.saved-item:hover {
-  border-color: #444;
-}
+.saved-item:hover { border-color: #444; }
 
 .saved-name-wrap {
   display: flex;
@@ -137,13 +194,9 @@ function commitEdit(id: string) {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .saved-name:hover { color: #fff; }
 
-.saved-date {
-  font-size: 10px;
-  color: #444;
-}
+.saved-date { font-size: 10px; color: #444; }
 
 .saved-input {
   background: #111;
@@ -156,11 +209,7 @@ function commitEdit(id: string) {
   width: 160px;
 }
 
-.saved-actions {
-  display: flex;
-  gap: 4px;
-  flex-shrink: 0;
-}
+.saved-actions { display: flex; gap: 4px; flex-shrink: 0; }
 
 .act-btn {
   background: #2a2a2a;
@@ -176,8 +225,16 @@ function commitEdit(id: string) {
   justify-content: center;
   transition: background 0.1s, color 0.1s;
 }
-
 .act-btn:hover { background: #333; color: #fff; }
 .act-load:hover { color: #2dc653; }
 .act-del:hover  { color: #e63946; }
+
+.empty-hint {
+  font-size: 12px;
+  color: #444;
+  text-align: center;
+  padding: 12px 0 4px;
+  line-height: 1.8;
+}
+.empty-hint strong { color: #666; }
 </style>

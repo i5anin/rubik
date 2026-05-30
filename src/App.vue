@@ -11,7 +11,7 @@ import { useSavedConfigs } from './composables/useSavedConfigs'
 
 const { faces, setCell, resetAll, toKociemba, fromKociemba, validation } = useCube()
 const { solve, solving, rawSolution, solveError, steps, clear } = useSolver()
-const { configs, save, remove, rename } = useSavedConfigs()
+const { configs, save, remove, rename, exportJson, importJson } = useSavedConfigs()
 
 const activePaint = ref<FaceLetter>('R')
 const saveMsg = ref('')
@@ -51,6 +51,17 @@ function handleSave() {
 function handleLoad(state: string) {
   fromKociemba(state)
   clear()
+}
+
+const importNotice = ref('')
+async function handleImport(file: File) {
+  try {
+    const count = await importJson(file)
+    importNotice.value = count > 0 ? `Импортировано: ${count}` : 'Всё уже есть'
+  } catch {
+    importNotice.value = 'Ошибка файла'
+  }
+  setTimeout(() => (importNotice.value = ''), 2500)
 }
 </script>
 
@@ -139,6 +150,9 @@ function handleLoad(state: string) {
       </button>
     </section>
 
+    <!-- Уведомление импорта -->
+    <div v-if="importNotice" class="notice-box">{{ importNotice }}</div>
+
     <!-- Ошибка солвера -->
     <div v-if="solveError" class="error-box">
       ⚠ {{ solveError }}
@@ -153,6 +167,8 @@ function handleLoad(state: string) {
       @load="handleLoad"
       @remove="remove"
       @rename="rename"
+      @export="exportJson"
+      @import="handleImport"
     />
 
   </div>
@@ -271,6 +287,16 @@ h1 {
   padding: 12px 18px;
   font-size: 13px;
   color: #e63946;
+  text-align: center;
+}
+
+.notice-box {
+  background: rgba(72,149,239,0.1);
+  border: 1px solid #4895ef;
+  border-radius: 9px;
+  padding: 10px 18px;
+  font-size: 13px;
+  color: #4895ef;
   text-align: center;
 }
 </style>

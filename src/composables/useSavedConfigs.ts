@@ -48,5 +48,39 @@ export function useSavedConfigs() {
     if (c) { c.name = newName; persist(configs.value) }
   }
 
-  return { configs, save, remove, rename }
+  /** Скачать все конфиги как .json файл */
+  function exportJson() {
+    const data = JSON.stringify(configs.value, null, 2)
+    const blob = new Blob([data], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `rubik-configs-${new Date().toISOString().slice(0, 10)}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  /** Импортировать конфиги из .json файла (добавляет к существующим, дедупликация по id) */
+  function importJson(file: File): Promise<number> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        try {
+          const parsed: SavedConfig[] = JSON.parse(e.target?.result as string)
+          if (!Array.isArray(parsed)) throw new Error('Неверный формат')
+          const existingIds = new Set(configs.value.map(c => c.id))
+          const fresh = parsed.filter(c => c.id && c.state && !existingIds.has(c.id))
+          configs.value = [...fresh, ...configs.value]
+          persist(configs.value)
+          resolve(fresh.length)
+        } catch (err) {
+          reject(err)
+        }
+      }
+      reader.onerror = reject
+      reader.readAsText(file)
+    })
+  }
+
+  return { configs, save, remove, rename, exportJson, importJson }
 }

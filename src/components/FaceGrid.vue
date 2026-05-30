@@ -9,6 +9,8 @@ const props = defineProps<{
   activePaint: FaceLetter
   activeFace?: FaceLetter | null
   currentMove?: string | null
+  animatingFace?: FaceLetter | null
+  animatingMove?: string | null
 }>()
 
 const emit = defineEmits<{
@@ -22,21 +24,39 @@ const COLOR_RU: Record<FaceLetter, string> = {
 
 const hovered = ref<number | null>(null)
 
-// Эта грань — текущая в решении?
-const isActive = computed(() => !!props.activeFace && props.activeFace === props.face)
+const isActive    = computed(() => !!props.activeFace    && props.activeFace    === props.face)
+const isAnimating = computed(() => !!props.animatingFace && props.animatingFace === props.face)
 
-// Иконка направления вращения
+// Иконка направления на оверлее
 const rotationIcon = computed(() => {
-  if (!isActive.value || !props.currentMove) return ''
-  const mod = props.currentMove.slice(1)
-  if (mod === '2') return '↻↻'
+  if (!isActive.value && !isAnimating.value) return ''
+  const move = props.animatingMove ?? props.currentMove ?? ''
+  const mod = move.slice(1)
+  if (mod === '2')  return '↻↻'
   if (mod === "'") return '↺'
   return '↻'
 })
 
-// Динамический glow по цвету грани
+// CSS класс анимации — зависит от оси и направления хода
+const animClass = computed(() => {
+  if (!isAnimating.value || !props.animatingMove) return null
+  const f   = props.face
+  const mod = props.animatingMove.slice(1)
+
+  // Ось вращения: U/D — X, R/L — Y, F/B — Z
+  const axis = (f === 'U' || f === 'D') ? 'x'
+             : (f === 'R' || f === 'L') ? 'y'
+             : 'z'
+
+  // Направление
+  const dir = mod === "'" ? 'ccw' : mod === '2' ? 'half' : 'cw'
+
+  return `anim-${axis}-${dir}`
+})
+
+// Цветной glow на активной грани
 const activeGlow = computed(() => {
-  if (!isActive.value) return {}
+  if (!isActive.value && !isAnimating.value) return {}
   const color = FACE_BG[props.face]
   return {
     borderColor: color,
@@ -45,24 +65,27 @@ const activeGlow = computed(() => {
 })
 
 function cellStyle(sticker: FaceLetter, idx: number) {
-  const isCenter = idx === 4
   return {
     backgroundColor: FACE_BG[sticker],
-    cursor: isCenter ? 'not-allowed' : 'pointer',
-    outline: isCenter ? '2px inset rgba(0,0,0,0.25)' : 'none',
+    cursor: idx === 4 ? 'not-allowed' : 'pointer',
+    outline: idx === 4 ? '2px inset rgba(0,0,0,0.25)' : 'none',
     outlineOffset: '-3px',
-    opacity: isCenter ? 0.75 : 1,
+    opacity: idx === 4 ? 0.75 : 1,
   }
 }
 </script>
 
 <template>
-  <div class="face-wrap" :class="{ 'face-active': isActive }">
+  <div class="face-wrap" :class="{ 'face-active': isActive || isAnimating }">
     <div class="face-label">{{ FACE_LABEL[face] }}</div>
 
-    <div class="face-grid" :style="activeGlow">
-      <!-- Оверлей с направлением вращения -->
-      <div v-if="isActive" class="rotation-overlay">
+    <div
+      class="face-grid"
+      :class="animClass"
+      :style="activeGlow"
+    >
+      <!-- Оверлей с иконкой вращения -->
+      <div v-if="isActive || isAnimating" class="rotation-overlay">
         <span class="rotation-icon">{{ rotationIcon }}</span>
       </div>
 
@@ -90,17 +113,18 @@ function cellStyle(sticker: FaceLetter, idx: number) {
 </template>
 
 <style scoped>
+/* ── Обёртка ── */
 .face-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
+  perspective: 400px;       /* нужно для 3D вращения дочернего face-grid */
   transition: transform 0.2s;
 }
 
-/* Активная грань — чуть увеличивается */
 .face-active {
-  transform: scale(1.06);
+  transform: scale(1.07);
 }
 
 .face-label {
@@ -111,16 +135,11 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   letter-spacing: 0.06em;
   transition: color 0.2s;
 }
+.face-active .face-label { color: #fff; }
 
-.face-active .face-label {
-  color: #fff;
-}
+.face-sub { font-size: 10px; color: #444; }
 
-.face-sub {
-  font-size: 10px;
-  color: #444;
-}
-
+/* ── Сетка ── */
 .face-grid {
   position: relative;
   display: grid;
@@ -132,19 +151,46 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   border-radius: 8px;
   border: 1px solid #2a2a2a;
   transition: border-color 0.2s, box-shadow 0.2s;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
-/* Пульсирующая анимация на активной грани */
+/* Пульс на активной (ещё не анимирующей) грани */
 @keyframes pulse-glow {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  50%       { opacity: 0.75; }
+}
+.face-active .face-grid:not([class*="anim-"]) {
+  animation: pulse-glow 1.1s ease-in-out infinite;
 }
 
-.face-active .face-grid {
-  animation: pulse-glow 1s ease-in-out infinite;
-}
+/* ── 9 анимаций: X/Y/Z × CW/CCW/HALF ── */
+/* X axis  (U, D) */
+@keyframes flip-x-cw   { 0%{transform:rotateX(0)}   50%{transform:rotateX(90deg); filter:blur(3px); opacity:.45} 100%{transform:rotateX(0)} }
+@keyframes flip-x-ccw  { 0%{transform:rotateX(0)}   50%{transform:rotateX(-90deg);filter:blur(3px); opacity:.45} 100%{transform:rotateX(0)} }
+@keyframes flip-x-half { 0%{transform:rotateX(0)}   50%{transform:rotateX(90deg); filter:blur(3px); opacity:.45} 100%{transform:rotateX(0)} }
 
-/* Оверлей с иконкой вращения */
+/* Y axis  (R, L) */
+@keyframes flip-y-cw   { 0%{transform:rotateY(0)}   50%{transform:rotateY(90deg); filter:blur(3px); opacity:.45} 100%{transform:rotateY(0)} }
+@keyframes flip-y-ccw  { 0%{transform:rotateY(0)}   50%{transform:rotateY(-90deg);filter:blur(3px); opacity:.45} 100%{transform:rotateY(0)} }
+@keyframes flip-y-half { 0%{transform:rotateY(0)}   50%{transform:rotateY(90deg); filter:blur(3px); opacity:.45} 100%{transform:rotateY(0)} }
+
+/* Z axis  (F, B) */
+@keyframes flip-z-cw   { 0%{transform:rotateZ(0)}   50%{transform:rotateZ(90deg); filter:blur(3px); opacity:.45} 100%{transform:rotateZ(0)} }
+@keyframes flip-z-ccw  { 0%{transform:rotateZ(0)}   50%{transform:rotateZ(-90deg);filter:blur(3px); opacity:.45} 100%{transform:rotateZ(0)} }
+@keyframes flip-z-half { 0%{transform:rotateZ(0)}   50%{transform:rotateZ(180deg);filter:blur(3px); opacity:.45} 100%{transform:rotateZ(0)} }
+
+.anim-x-cw   { animation: flip-x-cw   0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+.anim-x-ccw  { animation: flip-x-ccw  0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+.anim-x-half { animation: flip-x-half 0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+.anim-y-cw   { animation: flip-y-cw   0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+.anim-y-ccw  { animation: flip-y-ccw  0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+.anim-y-half { animation: flip-y-half 0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+.anim-z-cw   { animation: flip-z-cw   0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+.anim-z-ccw  { animation: flip-z-ccw  0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+.anim-z-half { animation: flip-z-half 0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+
+/* ── Оверлей с направлением ── */
 .rotation-overlay {
   position: absolute;
   inset: 0;
@@ -154,21 +200,19 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   pointer-events: none;
   z-index: 10;
   border-radius: 6px;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.38);
 }
 
 .rotation-icon {
-  font-size: 28px;
+  font-size: 26px;
   color: #fff;
-  text-shadow: 0 0 12px rgba(255,255,255,0.8);
+  text-shadow: 0 0 12px rgba(255,255,255,0.9);
   font-weight: 900;
   letter-spacing: -2px;
 }
 
-/* Ячейки */
-.cell-wrap {
-  position: relative;
-}
+/* ── Ячейки ── */
+.cell-wrap { position: relative; }
 
 .cell {
   width: 100%;
@@ -176,13 +220,12 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   border-radius: 5px;
   transition: filter 0.08s, transform 0.08s;
 }
-
 .cell:not(.center):hover {
   filter: brightness(1.25);
   transform: scale(1.06);
 }
 
-/* Тултип */
+/* ── Тултип ── */
 .tooltip {
   position: absolute;
   bottom: calc(100% + 5px);
@@ -199,7 +242,6 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   pointer-events: none;
   z-index: 100;
 }
-
 .tooltip::after {
   content: '';
   position: absolute;

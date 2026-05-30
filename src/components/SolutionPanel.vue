@@ -8,6 +8,7 @@ const props = defineProps<{
   raw: string
   steps: SolveStep[]
   completedCount: number
+  isAnimating?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -115,6 +116,7 @@ function stepState(idx: number): 'done' | 'current' | 'upcoming' {
             <button
               v-if="stepState(idx) === 'current'"
               class="btn-done"
+              :disabled="isAnimating"
               @click="emit('step-complete', step.move)"
             >
               Готово ✓

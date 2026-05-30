@@ -28,6 +28,11 @@ const currentMoveFace = computed(() =>
   currentMove.value ? currentMove.value[0] as FaceLetter : null
 )
 
+// Анимация: какая грань сейчас анимируется и какой ход
+const animatingFace = ref<FaceLetter | null>(null)
+const animatingMoveStr = ref<string | null>(null)
+const isAnimatingStep = ref(false)
+
 function paint(face: FaceLetter, idx: number) {
   setCell(face, idx, activePaint.value)
   clear()
@@ -56,12 +61,31 @@ async function handleSolve() {
 }
 
 async function handleStepComplete(move: string) {
+  if (isAnimatingStep.value) return
+  isAnimatingStep.value = true
+
+  // 1. Запустить анимацию
+  animatingFace.value = move[0] as FaceLetter
+  animatingMoveStr.value = move
+
+  // 2. Подождать первую половину (грань «уходит»)
+  await new Promise(r => setTimeout(r, 210))
+
+  // 3. В середине — обновить стикеры (грань невидима в 90°)
   const { default: Cube } = await import('cubejs')
   stateHistory.value.push(toKociemba())
   const cube = Cube.fromString(toKociemba())
   cube.move(move)
   fromKociemba(cube.asString())
+
+  // 4. Подождать вторую половину (грань «возвращается»)
+  await new Promise(r => setTimeout(r, 210))
+
+  // 5. Завершить
+  animatingFace.value = null
+  animatingMoveStr.value = null
   completedCount.value++
+  isAnimatingStep.value = false
 }
 
 function handleStepUndo() {
@@ -131,31 +155,37 @@ async function handleImport(file: File) {
       <div class="area-u">
         <FaceGrid face="U" :stickers="faces.U" :active-paint="activePaint"
           :active-face="currentMoveFace" :current-move="currentMove"
+          :animating-face="animatingFace" :animating-move="animatingMoveStr"
           @paint="paint('U', $event)" />
       </div>
       <div class="area-l">
         <FaceGrid face="L" :stickers="faces.L" :active-paint="activePaint"
           :active-face="currentMoveFace" :current-move="currentMove"
+          :animating-face="animatingFace" :animating-move="animatingMoveStr"
           @paint="paint('L', $event)" />
       </div>
       <div class="area-f">
         <FaceGrid face="F" :stickers="faces.F" :active-paint="activePaint"
           :active-face="currentMoveFace" :current-move="currentMove"
+          :animating-face="animatingFace" :animating-move="animatingMoveStr"
           @paint="paint('F', $event)" />
       </div>
       <div class="area-r">
         <FaceGrid face="R" :stickers="faces.R" :active-paint="activePaint"
           :active-face="currentMoveFace" :current-move="currentMove"
+          :animating-face="animatingFace" :animating-move="animatingMoveStr"
           @paint="paint('R', $event)" />
       </div>
       <div class="area-b">
         <FaceGrid face="B" :stickers="faces.B" :active-paint="activePaint"
           :active-face="currentMoveFace" :current-move="currentMove"
+          :animating-face="animatingFace" :animating-move="animatingMoveStr"
           @paint="paint('B', $event)" />
       </div>
       <div class="area-d">
         <FaceGrid face="D" :stickers="faces.D" :active-paint="activePaint"
           :active-face="currentMoveFace" :current-move="currentMove"
+          :animating-face="animatingFace" :animating-move="animatingMoveStr"
           @paint="paint('D', $event)" />
       </div>
     </section>
@@ -201,6 +231,7 @@ async function handleImport(file: File) {
       :raw="rawSolution"
       :steps="steps"
       :completed-count="completedCount"
+      :is-animating="isAnimatingStep"
       @step-complete="handleStepComplete"
       @step-undo="handleStepUndo"
     />

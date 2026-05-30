@@ -16,6 +16,10 @@ const { configs, save, remove, rename, exportJson, importJson } = useSavedConfig
 const activePaint = ref<FaceLetter>('R')
 const saveMsg = ref('')
 
+// Пошаговое выполнение
+const completedCount = ref(0)
+const stateHistory = ref<string[]>([]) // для undo
+
 function paint(face: FaceLetter, idx: number) {
   setCell(face, idx, activePaint.value)
   clear()
@@ -38,7 +42,26 @@ async function handleScramble() {
 
 async function handleSolve() {
   if (!validation.value.ok) return
+  completedCount.value = 0
+  stateHistory.value = []
   await solve(toKociemba())
+}
+
+async function handleStepComplete(move: string) {
+  const { default: Cube } = await import('cubejs')
+  stateHistory.value.push(toKociemba())
+  const cube = Cube.fromString(toKociemba())
+  cube.move(move)
+  fromKociemba(cube.asString())
+  completedCount.value++
+}
+
+function handleStepUndo() {
+  const prev = stateHistory.value.pop()
+  if (prev !== undefined) {
+    fromKociemba(prev)
+    completedCount.value--
+  }
 }
 
 function handleSave() {
@@ -159,7 +182,14 @@ async function handleImport(file: File) {
     </div>
 
     <!-- Решение -->
-    <SolutionPanel v-if="rawSolution !== null" :raw="rawSolution" :steps="steps" />
+    <SolutionPanel
+      v-if="rawSolution !== null"
+      :raw="rawSolution"
+      :steps="steps"
+      :completed-count="completedCount"
+      @step-complete="handleStepComplete"
+      @step-undo="handleStepUndo"
+    />
 
     <!-- Сохранённые конфиги -->
     <SavedConfigs

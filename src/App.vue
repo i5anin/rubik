@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import type { FaceLetter } from './types/cube'
 import { FACE_ORDER, FACE_BG, FACE_TEXT, FACE_SUBLABEL } from './types/cube'
 import FaceGrid from './components/FaceGrid.vue'
@@ -19,6 +19,14 @@ const saveMsg = ref('')
 // Пошаговое выполнение
 const completedCount = ref(0)
 const stateHistory = ref<string[]>([]) // для undo
+
+// Текущий ход и грань которая двигается
+const currentMove = computed(() =>
+  steps.value[completedCount.value]?.move ?? null
+)
+const currentMoveFace = computed(() =>
+  currentMove.value ? currentMove.value[0] as FaceLetter : null
+)
 
 function paint(face: FaceLetter, idx: number) {
   setCell(face, idx, activePaint.value)
@@ -122,26 +130,32 @@ async function handleImport(file: File) {
     <section class="cube-map">
       <div class="area-u">
         <FaceGrid face="U" :stickers="faces.U" :active-paint="activePaint"
+          :active-face="currentMoveFace" :current-move="currentMove"
           @paint="paint('U', $event)" />
       </div>
       <div class="area-l">
         <FaceGrid face="L" :stickers="faces.L" :active-paint="activePaint"
+          :active-face="currentMoveFace" :current-move="currentMove"
           @paint="paint('L', $event)" />
       </div>
       <div class="area-f">
         <FaceGrid face="F" :stickers="faces.F" :active-paint="activePaint"
+          :active-face="currentMoveFace" :current-move="currentMove"
           @paint="paint('F', $event)" />
       </div>
       <div class="area-r">
         <FaceGrid face="R" :stickers="faces.R" :active-paint="activePaint"
+          :active-face="currentMoveFace" :current-move="currentMove"
           @paint="paint('R', $event)" />
       </div>
       <div class="area-b">
         <FaceGrid face="B" :stickers="faces.B" :active-paint="activePaint"
+          :active-face="currentMoveFace" :current-move="currentMove"
           @paint="paint('B', $event)" />
       </div>
       <div class="area-d">
         <FaceGrid face="D" :stickers="faces.D" :active-paint="activePaint"
+          :active-face="currentMoveFace" :current-move="currentMove"
           @paint="paint('D', $event)" />
       </div>
     </section>

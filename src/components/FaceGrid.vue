@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import type { FaceLetter } from '../types/cube'
 import { FACE_BG, FACE_LABEL, FACE_SUBLABEL } from '../types/cube'
 
-defineProps<{
+const props = defineProps<{
   face: FaceLetter
   stickers: FaceLetter[]
   activePaint: FaceLetter
+  activeFace?: FaceLetter | null
+  currentMove?: string | null
 }>()
 
 const emit = defineEmits<{
@@ -14,16 +16,33 @@ const emit = defineEmits<{
 }>()
 
 const COLOR_RU: Record<FaceLetter, string> = {
-  U: 'Белый',
-  R: 'Красный',
-  F: 'Зелёный',
-  D: 'Жёлтый',
-  L: 'Оранжевый',
-  B: 'Синий',
+  U: 'Белый', R: 'Красный', F: 'Зелёный',
+  D: 'Жёлтый', L: 'Оранжевый', B: 'Синий',
 }
 
-// hover tooltip state
 const hovered = ref<number | null>(null)
+
+// Эта грань — текущая в решении?
+const isActive = computed(() => !!props.activeFace && props.activeFace === props.face)
+
+// Иконка направления вращения
+const rotationIcon = computed(() => {
+  if (!isActive.value || !props.currentMove) return ''
+  const mod = props.currentMove.slice(1)
+  if (mod === '2') return '↻↻'
+  if (mod === "'") return '↺'
+  return '↻'
+})
+
+// Динамический glow по цвету грани
+const activeGlow = computed(() => {
+  if (!isActive.value) return {}
+  const color = FACE_BG[props.face]
+  return {
+    borderColor: color,
+    boxShadow: `0 0 0 2px ${color}, 0 0 18px ${color}66`,
+  }
+})
 
 function cellStyle(sticker: FaceLetter, idx: number) {
   const isCenter = idx === 4
@@ -38,9 +57,15 @@ function cellStyle(sticker: FaceLetter, idx: number) {
 </script>
 
 <template>
-  <div class="face-wrap">
+  <div class="face-wrap" :class="{ 'face-active': isActive }">
     <div class="face-label">{{ FACE_LABEL[face] }}</div>
-    <div class="face-grid">
+
+    <div class="face-grid" :style="activeGlow">
+      <!-- Оверлей с направлением вращения -->
+      <div v-if="isActive" class="rotation-overlay">
+        <span class="rotation-icon">{{ rotationIcon }}</span>
+      </div>
+
       <div
         v-for="(sticker, idx) in stickers"
         :key="idx"
@@ -54,12 +79,12 @@ function cellStyle(sticker: FaceLetter, idx: number) {
           @mouseleave="hovered = null"
           @click="idx !== 4 && emit('paint', idx)"
         />
-        <!-- Тултип -->
         <div v-if="hovered === idx" class="tooltip">
           {{ COLOR_RU[sticker] }}
         </div>
       </div>
     </div>
+
     <div class="face-sub">{{ FACE_SUBLABEL[face] }}</div>
   </div>
 </template>
@@ -70,6 +95,12 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   flex-direction: column;
   align-items: center;
   gap: 5px;
+  transition: transform 0.2s;
+}
+
+/* Активная грань — чуть увеличивается */
+.face-active {
+  transform: scale(1.06);
 }
 
 .face-label {
@@ -78,6 +109,11 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   color: #777;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  transition: color 0.2s;
+}
+
+.face-active .face-label {
+  color: #fff;
 }
 
 .face-sub {
@@ -86,6 +122,7 @@ function cellStyle(sticker: FaceLetter, idx: number) {
 }
 
 .face-grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, 42px);
   grid-template-rows: repeat(3, 42px);
@@ -94,8 +131,41 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   background: #1c1c1c;
   border-radius: 8px;
   border: 1px solid #2a2a2a;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* Пульсирующая анимация на активной грани */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.face-active .face-grid {
+  animation: pulse-glow 1s ease-in-out infinite;
+}
+
+/* Оверлей с иконкой вращения */
+.rotation-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.45);
+}
+
+.rotation-icon {
+  font-size: 28px;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255,255,255,0.8);
+  font-weight: 900;
+  letter-spacing: -2px;
+}
+
+/* Ячейки */
 .cell-wrap {
   position: relative;
 }
@@ -112,6 +182,7 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   transform: scale(1.06);
 }
 
+/* Тултип */
 .tooltip {
   position: absolute;
   bottom: calc(100% + 5px);

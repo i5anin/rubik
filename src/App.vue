@@ -4,13 +4,17 @@ import type { FaceLetter } from './types/cube'
 import { FACE_ORDER, FACE_BG, FACE_TEXT, FACE_SUBLABEL } from './types/cube'
 import FaceGrid from './components/FaceGrid.vue'
 import SolutionPanel from './components/SolutionPanel.vue'
+import SavedConfigs from './components/SavedConfigs.vue'
 import { useCube } from './composables/useCube'
 import { useSolver } from './composables/useSolver'
+import { useSavedConfigs } from './composables/useSavedConfigs'
 
 const { faces, setCell, resetAll, toKociemba, fromKociemba, validation } = useCube()
 const { solve, solving, rawSolution, solveError, steps, clear } = useSolver()
+const { configs, save, remove, rename } = useSavedConfigs()
 
 const activePaint = ref<FaceLetter>('R')
+const saveMsg = ref('')
 
 function paint(face: FaceLetter, idx: number) {
   setCell(face, idx, activePaint.value)
@@ -36,6 +40,18 @@ async function handleSolve() {
   if (!validation.value.ok) return
   await solve(toKociemba())
 }
+
+function handleSave() {
+  if (!validation.value.ok) return
+  save(toKociemba())
+  saveMsg.value = 'Сохранено!'
+  setTimeout(() => (saveMsg.value = ''), 1800)
+}
+
+function handleLoad(state: string) {
+  fromKociemba(state)
+  clear()
+}
 </script>
 
 <template>
@@ -46,7 +62,7 @@ async function handleSolve() {
       <h1>Кубик Рубика</h1>
       <p class="hint">
         Держи куб: <strong>белый верх</strong>, <strong>зелёный к тебе</strong>.
-        Кликай клетки, чтобы покрасить.
+        Кликай клетки, чтобы покрасить. Наводи — увидишь цвет.
       </p>
     </header>
 
@@ -70,12 +86,10 @@ async function handleSolve() {
 
     <!-- Карта куба — развёртка крестом -->
     <section class="cube-map">
-      <!-- Верх -->
       <div class="area-u">
         <FaceGrid face="U" :stickers="faces.U" :active-paint="activePaint"
           @paint="paint('U', $event)" />
       </div>
-      <!-- Средний ряд: Лево / Перед / Право / Зад -->
       <div class="area-l">
         <FaceGrid face="L" :stickers="faces.L" :active-paint="activePaint"
           @paint="paint('L', $event)" />
@@ -92,7 +106,6 @@ async function handleSolve() {
         <FaceGrid face="B" :stickers="faces.B" :active-paint="activePaint"
           @paint="paint('B', $event)" />
       </div>
-      <!-- Низ -->
       <div class="area-d">
         <FaceGrid face="D" :stickers="faces.D" :active-paint="activePaint"
           @paint="paint('D', $event)" />
@@ -107,6 +120,15 @@ async function handleSolve() {
       <div class="validation-chip" :class="validation.ok ? 'ok' : 'err'">
         {{ validation.msg }}
       </div>
+
+      <button
+        class="btn btn-save"
+        :disabled="!validation.ok"
+        @click="handleSave"
+        :title="saveMsg || 'Сохранить текущее состояние'"
+      >
+        {{ saveMsg || '💾 Сохранить' }}
+      </button>
 
       <button
         class="btn btn-primary"
@@ -125,6 +147,14 @@ async function handleSolve() {
     <!-- Решение -->
     <SolutionPanel v-if="rawSolution !== null" :raw="rawSolution" :steps="steps" />
 
+    <!-- Сохранённые конфиги -->
+    <SavedConfigs
+      :configs="configs"
+      @load="handleLoad"
+      @remove="remove"
+      @rename="rename"
+    />
+
   </div>
 </template>
 
@@ -138,7 +168,6 @@ async function handleSolve() {
   gap: 28px;
 }
 
-/* ── Header ── */
 header { text-align: center; }
 
 h1 {
@@ -151,11 +180,7 @@ h1 {
   background-clip: text;
 }
 
-.hint {
-  color: #555;
-  font-size: 13px;
-  margin-top: 6px;
-}
+.hint { color: #555; font-size: 13px; margin-top: 6px; }
 .hint strong { color: #888; }
 
 /* ── Палитра ── */
@@ -165,16 +190,8 @@ h1 {
   gap: 12px;
   flex-wrap: wrap;
 }
-
-.palette-label {
-  font-size: 13px;
-  color: #666;
-}
-
-.palette {
-  display: flex;
-  gap: 6px;
-}
+.palette-label { font-size: 13px; color: #666; }
+.palette { display: flex; gap: 6px; }
 
 .paint-btn {
   width: 42px;
@@ -186,7 +203,6 @@ h1 {
   font-weight: 800;
   transition: transform 0.1s, border-color 0.1s, box-shadow 0.1s;
 }
-
 .paint-btn:hover { transform: scale(1.1); }
 .paint-btn.active {
   border-color: #fff;
@@ -200,13 +216,12 @@ h1 {
   grid-template-columns: repeat(4, auto);
   grid-template-rows: repeat(3, auto);
   grid-template-areas:
-    ".    u  .  ."
-    "l    f  r  b"
-    ".    d  .  .";
+    ".  u  .  ."
+    "l  f  r  b"
+    ".  d  .  .";
   gap: 5px;
   justify-content: center;
 }
-
 .area-u { grid-area: u; }
 .area-l { grid-area: l; }
 .area-f { grid-area: f; }
@@ -219,15 +234,15 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .btn {
-  padding: 10px 22px;
+  padding: 10px 18px;
   border: none;
   border-radius: 9px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.1s;
@@ -237,18 +252,18 @@ h1 {
 
 .btn-ghost    { background: #222; color: #bbb; }
 .btn-scramble { background: #2a2a2a; color: #ffd60a; border: 1px solid #444; }
+.btn-save     { background: #2a2a2a; color: #4895ef; border: 1px solid #444; }
 .btn-primary  { background: #e63946; color: #fff; }
 
 .validation-chip {
   font-size: 13px;
-  padding: 7px 16px;
+  padding: 7px 14px;
   border-radius: 20px;
   font-weight: 500;
 }
-.validation-chip.ok { background: rgba(45,198,83,0.12); color: #2dc653; }
-.validation-chip.err { background: rgba(230,57,70,0.12); color: #e63946; }
+.validation-chip.ok  { background: rgba(45,198,83,0.12);  color: #2dc653; }
+.validation-chip.err { background: rgba(230,57,70,0.12);  color: #e63946; }
 
-/* ── Ошибка ── */
 .error-box {
   background: rgba(230,57,70,0.1);
   border: 1px solid #e63946;

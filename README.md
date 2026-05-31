@@ -13,7 +13,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/i5anin/rubik/pulls)
 
-[**Live Demo**](https://github.com/i5anin/rubik) · [Report Bug](https://github.com/i5anin/rubik/issues) · [Request Feature](https://github.com/i5anin/rubik/issues)
+[**🚀 Live Demo**](https://rubik-zeta.vercel.app) · [Report Bug](https://github.com/i5anin/rubik/issues) · [Request Feature](https://github.com/i5anin/rubik/issues)
 
 **English** · [Русский](./README.ru.md)
 

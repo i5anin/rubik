@@ -152,10 +152,10 @@ async function handleImport(file: File) {
         <button
           v-for="face in FACE_ORDER"
           :key="face"
+          v-tooltip="FACE_SUBLABEL[face]"
           class="paint-btn"
           :class="{ active: activePaint === face }"
           :style="{ background: FACE_BG[face], color: FACE_TEXT[face] }"
-          :title="FACE_SUBLABEL[face]"
           @click="activePaint = face"
         >
           {{ FACE_SUBLABEL[face][0] }}

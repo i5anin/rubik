@@ -8,7 +8,7 @@ const show = ref(false)
 
 <template>
   <div class="wrap" @mouseenter="show = true" @mouseleave="show = false">
-    <button class="algo-btn" :title="t('algo.title')"><Icon name="info" /></button>
+    <button v-tooltip="t('algo.title')" class="algo-btn"><Icon name="info" /></button>
     <Transition name="pop">
       <div v-if="show" class="popover">
         <div class="pop-title">{{ t('algo.title') }}</div>

@@ -10,3 +10,30 @@ body {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #1a1a1a; }
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+/* ── v-tooltip bubble (custom replacement for native `title`) ── */
+.app-tooltip {
+  position: fixed;
+  z-index: 9999;
+  max-width: min(80vw, 360px);
+  padding: 6px 11px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #1d1d1d, #151515);
+  border: 1px solid #333;
+  color: #f0f0f0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px) scale(0.97);
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+.app-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}

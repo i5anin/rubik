@@ -17,7 +17,7 @@ async function copyAddr() {
   <div class="links">
 
     <!-- Переключатель языка (SVG-глобус — флаги-эмодзи не рендерятся в Windows) -->
-    <button class="lang-btn" :title="lang === 'ru' ? 'Switch to English' : 'Переключить на русский'" @click="toggleLang">
+    <button v-tooltip="lang === 'ru' ? 'Switch to English' : 'Переключить на русский'" class="lang-btn" @click="toggleLang">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="10" />
         <path d="M2 12h20" />
@@ -27,7 +27,7 @@ async function copyAddr() {
     </button>
 
     <!-- GitHub -->
-    <a :href="GITHUB_URL" target="_blank" rel="noopener" class="icon-btn" :title="t('header.github')">
+    <a v-tooltip="t('header.github')" :href="GITHUB_URL" target="_blank" rel="noopener" class="icon-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57
                  0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695
@@ -42,9 +42,9 @@ async function copyAddr() {
 
     <!-- Crypto -->
     <button
+      v-tooltip="copied ? t('header.copied') : `${CRYPTO_LABEL}: ${CRYPTO_ADDR}`"
       class="icon-btn crypto-btn"
       :class="{ copied }"
-      :title="copied ? t('header.copied') : `${CRYPTO_LABEL}: ${CRYPTO_ADDR}`"
       @click="copyAddr"
     >
       <!-- Ethereum diamond logo -->

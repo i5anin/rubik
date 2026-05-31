@@ -82,8 +82,8 @@ const stepDesc = (move: string) => describeMove(move)
           <div class="step-actions">
             <button
               v-if="stepState(idx) === 'done' && idx === completedCount - 1"
+              v-tooltip="t('saved.undo')"
               class="btn-undo"
-              :title="t('saved.undo')"
               @click="emit('step-undo')"
             ><Icon name="undo" /></button>
             <button

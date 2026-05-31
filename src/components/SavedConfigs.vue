@@ -25,9 +25,10 @@ function commitEdit(id: string) {
 }
 function triggerImport() { fileInput.value?.click() }
 function onFileChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files?.[0]
-  if (file) {emit('import', file)
-  ;}(e.target as HTMLInputElement).value = ''
+  const input = e.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (file) { emit('import', file) }
+  input.value = ''
 }
 </script>
 
@@ -58,9 +59,9 @@ function onFileChange(e: Event) {
           <span class="saved-date">{{ c.savedAt }}</span>
         </div>
         <div class="saved-actions">
-          <button class="act-btn act-load" :title="t('saved.load')" @click="emit('load', c.state)"><Icon name="undo" /></button>
-          <button class="act-btn act-edit" :title="t('saved.rename')" @click="startEdit(c)"><Icon name="pencil" /></button>
-          <button class="act-btn act-del" :title="t('saved.delete')" @click="emit('remove', c.id)"><Icon name="close" /></button>
+          <button v-tooltip="t('saved.load')" class="act-btn act-load" @click="emit('load', c.state)"><Icon name="undo" /></button>
+          <button v-tooltip="t('saved.rename')" class="act-btn act-edit" @click="startEdit(c)"><Icon name="pencil" /></button>
+          <button v-tooltip="t('saved.delete')" class="act-btn act-del" @click="emit('remove', c.id)"><Icon name="close" /></button>
         </div>
       </div>
     </div>

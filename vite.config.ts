@@ -1,5 +1,25 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
+
+/**
+ * cubejs closes its modules with `}).call(this)`, relying on top-level `this`
+ * being a real object (module.exports / window). In a bundled ESM context it
+ * is `undefined`, so `this.Cube` throws. A global `define: { this }` is unsafe
+ * (it would rewrite `this` everywhere, including Vue internals), and Rolldown
+ * ignores `rollupOptions.moduleContext`. So patch the source surgically — only
+ * cubejs files, only the `.call(this)` tail — before any bundler touches it.
+ * Runs `pre`, in both dev and build.
+ */
+function cubejsThisFix(): Plugin {
+  return {
+    name: 'cubejs-this-fix',
+    enforce: 'pre',
+    transform(code, id) {
+      if (!id.includes('cubejs') || !code.includes('.call(this)')) { return null }
+      return { code: code.replaceAll('.call(this)', '.call(globalThis)'), map: null }
+    },
+  }
+}
 
 /**
  * Vite 8 (Rolldown).
@@ -11,7 +31,7 @@ import vue from '@vitejs/plugin-vue'
  * production `vite build` never references them.
  */
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [cubejsThisFix(), vue()],
 
   // cubejs ends each module with `}).call(this)`, expecting top-level `this`
   // to be `module.exports` (CJS) or `window` (browser). In a pre-bundled ESM

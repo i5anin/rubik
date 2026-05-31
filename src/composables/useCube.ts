@@ -37,11 +37,6 @@ export function useCube() {
     faces[face][idx] = colour
   }
 
-  /** Reset a single face to its solved (uniform) colour. */
-  function resetFace(face: FaceLetter): void {
-    faces[face] = Array<FaceLetter>(9).fill(face)
-  }
-
   /** Reset all six faces to the solved state. */
   function resetAll(): void {
     FACE_ORDER.forEach(face => { faces[face].splice(0, 9, ...Array<FaceLetter>(9).fill(face)) })
@@ -91,5 +86,5 @@ export function useCube() {
     ) as Record<FaceLetter, number>
   })
 
-  return { faces, setCell, resetFace, resetAll, toKociemba, fromKociemba, validation, colorCounts }
+  return { faces, setCell, resetAll, toKociemba, fromKociemba, validation, colorCounts }
 }

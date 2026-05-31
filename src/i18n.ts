@@ -26,7 +26,7 @@ function detectLang(): Lang {
 
 export const lang = ref<Lang>(detectLang())
 
-export function setLang(l: Lang): void {
+function setLang(l: Lang): void {
   lang.value = l
   localStorage.setItem(STORAGE_KEY, l)
 }

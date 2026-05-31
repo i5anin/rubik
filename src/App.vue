@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import Cube from 'cubejs'
 import type { FaceLetter } from './types/cube'
 import { FACE_ORDER, FACE_BG, FACE_TEXT, FACE_SUBLABEL } from './types/cube'
 import { t } from './i18n'
@@ -48,7 +49,6 @@ function handleReset() {
 }
 
 async function handleScramble() {
-  const { default: Cube } = await import('cubejs')
   Cube.initSolver()
   const scr = Cube.scramble()
   const c = new Cube()
@@ -76,7 +76,6 @@ async function handleStepComplete(move: string) {
   await new Promise(r => setTimeout(r, 210))
 
   // 3. В середине — обновить стикеры (грань невидима в 90°)
-  const { default: Cube } = await import('cubejs')
   stateHistory.value.push(toKociemba())
   const cube = Cube.fromString(toKociemba())
   cube.move(move)

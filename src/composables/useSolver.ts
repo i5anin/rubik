@@ -5,7 +5,7 @@ let solverReady = false
 
 /** Инициализировать таблицы один раз (синхронно, ~0.5с) */
 async function ensureInit() {
-  if (solverReady) return
+  if (solverReady) {return}
   // defer чтобы UI успел обновиться
   await new Promise<void>(resolve => setTimeout(resolve, 30))
   Cube.initSolver()

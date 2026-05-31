@@ -14,9 +14,10 @@ const props = defineProps<{
 const show = ref(false)
 
 const chipMsg = computed(() => {
-  if (props.ok) return t('valid.ok')
-  if (props.errorFace != null && props.errorCount != null)
+  if (props.ok) { return t('valid.ok') }
+  if (props.errorFace !== undefined && props.errorCount !== undefined) {
     return `${t('color.' + props.errorFace)}: ${props.errorCount}/9`
+  }
   return t('valid.ok')
 })
 
@@ -24,8 +25,8 @@ const rows = computed(() =>
   FACE_ORDER.map(f => ({
     face: f,
     name: t(`color.${f}`),
-    count: props.colorCounts[f] ?? 0,
-    ok: (props.colorCounts[f] ?? 0) === 9,
+    count: (props.colorCounts[f] as number | undefined) ?? 0,
+    ok: ((props.colorCounts[f] as number | undefined) ?? 0) === 9,
     bg: FACE_BG[f],
   }))
 )

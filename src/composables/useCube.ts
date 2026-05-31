@@ -16,7 +16,7 @@ export function useCube() {
 
   /** Покрасить клетку (центр [4] — заблокирован) */
   function setCell(face: FaceLetter, idx: number, color: FaceLetter) {
-    if (idx === 4) return
+    if (idx === 4) {return}
     faces[face][idx] = color
   }
 
@@ -42,8 +42,8 @@ export function useCube() {
   const validation = computed<{ ok: boolean; errorFace?: FaceLetter; errorCount?: number }>(() => {
     const s = toKociemba()
     for (const face of FACE_ORDER) {
-      const count = [...s].filter(c => c === face).length
-      if (count !== 9) return { ok: false, errorFace: face, errorCount: count }
+      const count = Array.from(s).filter(c => c === face).length
+      if (count !== 9) {return { ok: false, errorFace: face, errorCount: count }}
     }
     return { ok: true }
   })
@@ -61,7 +61,7 @@ export function useCube() {
     const s = toKociemba()
     const res = {} as Record<FaceLetter, number>
     for (const face of FACE_ORDER) {
-      res[face] = [...s].filter(c => c === face).length
+      res[face] = Array.from(s).filter(c => c === face).length
     }
     return res
   })

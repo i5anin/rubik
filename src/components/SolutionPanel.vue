@@ -23,8 +23,8 @@ const progress = computed(() => props.steps.length ? Math.round((props.completed
 function moveStyle(move: string, done: boolean) {
   const face = move[0] as FaceLetter
   return {
-    backgroundColor: done ? '#2a2a2a' : (FACE_BG[face] ?? '#333'),
-    color: done ? '#555' : (FACE_TEXT[face] ?? '#fff'),
+    backgroundColor: done ? '#2a2a2a' : (FACE_BG[face] as string | undefined ?? '#333'),
+    color: done ? '#555' : (FACE_TEXT[face] as string | undefined ?? '#fff'),
     borderRadius: '4px', padding: '2px 7px', fontWeight: '700',
     fontFamily: 'monospace', fontSize: '14px', display: 'inline-block',
     minWidth: '32px', textAlign: 'center' as const, transition: 'all 0.2s',
@@ -33,8 +33,8 @@ function moveStyle(move: string, done: boolean) {
 
 function stepState(idx: number): 'done' | 'current' | 'upcoming' {
   const n = idx + 1
-  if (n <= props.completedCount) return 'done'
-  if (n === props.completedCount + 1) return 'current'
+  if (n <= props.completedCount) {return 'done'}
+  if (n === props.completedCount + 1) {return 'current'}
   return 'upcoming'
 }
 
@@ -66,7 +66,7 @@ const stepDesc = (move: string) => describeMove(move)
       <div class="steps">
         <div v-for="(step, idx) in steps" :key="step.n" class="step" :class="stepState(idx)">
           <span class="step-status">
-            <span v-if="stepState(idx) === 'done'"    class="icon-done">✓</span>
+            <span v-if="stepState(idx) === 'done'" class="icon-done">✓</span>
             <span v-else-if="stepState(idx) === 'current'" class="icon-cur">▶</span>
             <span v-else class="step-n">{{ step.n }}</span>
           </span>

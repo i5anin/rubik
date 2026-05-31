@@ -5,7 +5,7 @@ export type Lang = 'ru' | 'en'
 // ── Определение языка ──────────────────────────────────────────────
 function detectLang(): Lang {
   const stored = localStorage.getItem('rubik_lang') as Lang | null
-  if (stored === 'ru' || stored === 'en') return stored
+  if (stored === 'ru' || stored === 'en') {return stored}
   return navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'en'
 }
 
@@ -21,7 +21,8 @@ export function toggleLang() {
 }
 
 // ── Словарь ───────────────────────────────────────────────────────
-type Dict = Record<string, { ru: string; en: string }>
+interface DictEntry { ru: string; en: string }
+type Dict = Record<string, DictEntry | undefined>
 
 const dict: Dict = {
   // Приложение
@@ -132,7 +133,7 @@ export function t(key: string): string {
 
 // ── describeMove — описание хода на текущем языке ─────────────────
 export function describeMove(m: string): string {
-  const face = m[0] ?? ''
+  const face = m.charAt(0)
   const mod  = m.slice(1)
   const faceName = t(`face.${face}`)
   const look     = t(`move.look.${face}`)
@@ -142,9 +143,9 @@ export function describeMove(m: string): string {
 
 // ── pluralMoves — склонение числительного ─────────────────────────
 export function pluralMoves(n: number): string {
-  if (lang.value === 'en') return `${n} ${t('solution.move.5')}`
+  if (lang.value === 'en') {return `${n} ${t('solution.move.5')}`}
   const mod10 = n % 10, mod100 = n % 100
-  if (mod10 === 1 && mod100 !== 11) return `${n} ${t('solution.move.1')}`
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return `${n} ${t('solution.move.2')}`
+  if (mod10 === 1 && mod100 !== 11) {return `${n} ${t('solution.move.1')}`}
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) {return `${n} ${t('solution.move.2')}`}
   return `${n} ${t('solution.move.5')}`
 }

@@ -58,14 +58,14 @@ async function handleScramble() {
 }
 
 async function handleSolve() {
-  if (!validation.value.ok) return
+  if (!validation.value.ok) {return}
   completedCount.value = 0
   stateHistory.value = []
   await solve(toKociemba())
 }
 
 async function handleStepComplete(move: string) {
-  if (isAnimatingStep.value) return
+  if (isAnimatingStep.value) {return}
   isAnimatingStep.value = true
 
   // 1. Запустить анимацию
@@ -100,7 +100,7 @@ function handleStepUndo() {
 }
 
 function handleSave() {
-  if (!validation.value.ok) return
+  if (!validation.value.ok) {return}
   save(toKociemba())
   saveMsg.value = t('btn.saved')
   setTimeout(() => (saveMsg.value = ''), 1800)

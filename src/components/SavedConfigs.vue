@@ -5,11 +5,11 @@ import { t } from '../i18n'
 
 defineProps<{ configs: SavedConfig[] }>()
 const emit = defineEmits<{
-  (e: 'load', state: string): void
-  (e: 'remove', id: string): void
-  (e: 'rename', id: string, name: string): void
-  (e: 'export'): void
-  (e: 'import', file: File): void
+  load:   [state: string]
+  remove: [id: string]
+  rename: [id: string, name: string]
+  export: []
+  import: [file: File]
 }>()
 
 const editingId   = ref<string | null>(null)
@@ -19,14 +19,14 @@ const fileInput   = ref<HTMLInputElement | null>(null)
 
 function startEdit(c: SavedConfig) { editingId.value = c.id; editingName.value = c.name }
 function commitEdit(id: string) {
-  if (editingName.value.trim()) emit('rename', id, editingName.value.trim())
+  if (editingName.value.trim()) {emit('rename', id, editingName.value.trim())}
   editingId.value = null
 }
 function triggerImport() { fileInput.value?.click() }
 function onFileChange(e: Event) {
   const file = (e.target as HTMLInputElement).files?.[0]
-  if (file) emit('import', file)
-  ;(e.target as HTMLInputElement).value = ''
+  if (file) {emit('import', file)
+  ;}(e.target as HTMLInputElement).value = ''
 }
 </script>
 
@@ -48,20 +48,20 @@ function onFileChange(e: Event) {
       <div v-for="c in configs" :key="c.id" class="saved-item">
         <div class="saved-name-wrap">
           <input v-if="editingId === c.id" v-model="editingName" class="saved-input"
-            @keyup.enter="commitEdit(c.id)" @blur="commitEdit(c.id)" autofocus />
+            autofocus @keyup.enter="commitEdit(c.id)" @blur="commitEdit(c.id)" />
           <span v-else class="saved-name" @dblclick="startEdit(c)">{{ c.name }}</span>
           <span class="saved-date">{{ c.savedAt }}</span>
         </div>
         <div class="saved-actions">
-          <button class="act-btn act-load" :title="t('saved.load')"   @click="emit('load', c.state)">↩</button>
+          <button class="act-btn act-load" :title="t('saved.load')" @click="emit('load', c.state)">↩</button>
           <button class="act-btn act-edit" :title="t('saved.rename')" @click="startEdit(c)">✏</button>
-          <button class="act-btn act-del"  :title="t('saved.delete')" @click="emit('remove', c.id)">✕</button>
+          <button class="act-btn act-del" :title="t('saved.delete')" @click="emit('remove', c.id)">✕</button>
         </div>
       </div>
     </div>
 
     <div v-else class="empty-hint">
-      {{ t('saved.empty') }}<br/>
+      {{ t('saved.empty') }}<br />
       <strong>{{ t('saved.empty.hint') }}</strong>
     </div>
   </div>

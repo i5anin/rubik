@@ -4,14 +4,15 @@ export interface SavedConfig {
   id: string
   name: string
   state: string   // 54-char kociemba string
-  savedAt: string // ISO date string
+  savedAt: string
 }
 
 const STORAGE_KEY = 'rubik_saved_configs'
 
 function load(): SavedConfig[] {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')
+     
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as SavedConfig[]
   } catch {
     return []
   }
@@ -26,13 +27,8 @@ export function useSavedConfigs() {
 
   function save(state: string, name?: string) {
     const id = crypto.randomUUID()
-    const n = name?.trim() || `Конфиг ${configs.value.length + 1}`
-    const entry: SavedConfig = {
-      id,
-      name: n,
-      state,
-      savedAt: new Date().toLocaleString('ru'),
-    }
+    const n = name?.trim() ?? `Конфиг ${configs.value.length + 1}`
+    const entry: SavedConfig = { id, name: n, state, savedAt: new Date().toLocaleString('ru') }
     configs.value.unshift(entry)
     persist(configs.value)
     return entry
@@ -45,10 +41,9 @@ export function useSavedConfigs() {
 
   function rename(id: string, newName: string) {
     const c = configs.value.find(x => x.id === id)
-    if (c) { c.name = newName; persist(configs.value) }
+    if (c !== undefined) { c.name = newName; persist(configs.value) }
   }
 
-  /** Скачать все конфиги как .json файл */
   function exportJson() {
     const data = JSON.stringify(configs.value, null, 2)
     const blob = new Blob([data], { type: 'application/json' })
@@ -60,24 +55,24 @@ export function useSavedConfigs() {
     URL.revokeObjectURL(url)
   }
 
-  /** Импортировать конфиги из .json файла (добавляет к существующим, дедупликация по id) */
   function importJson(file: File): Promise<number> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader()
       reader.onload = (e) => {
         try {
-          const parsed: SavedConfig[] = JSON.parse(e.target?.result as string)
-          if (!Array.isArray(parsed)) throw new Error('Неверный формат')
+          const raw: unknown = JSON.parse(e.target?.result as string)
+          if (!Array.isArray(raw)) { throw new Error('Неверный формат') }
+          const parsed = raw as SavedConfig[]
           const existingIds = new Set(configs.value.map(c => c.id))
-          const fresh = parsed.filter(c => c.id && c.state && !existingIds.has(c.id))
+          const fresh = parsed.filter(c => c.id !== '' && c.state !== '' && !existingIds.has(c.id))
           configs.value = [...fresh, ...configs.value]
           persist(configs.value)
           resolve(fresh.length)
         } catch (err) {
-          reject(err)
+          reject(err instanceof Error ? err : new Error(String(err)))
         }
       }
-      reader.onerror = reject
+      reader.onerror = () => { reject(new Error('Ошибка чтения файла')) }
       reader.readAsText(file)
     })
   }

@@ -14,9 +14,7 @@ const props = defineProps<{
   animatingMove?: string | null
 }>()
 
-const emit = defineEmits<{
-  (e: 'paint', idx: number): void
-}>()
+const emit = defineEmits<(e: 'paint', idx: number) => void>()
 
 const hovered = ref<number | null>(null)
 
@@ -31,13 +29,13 @@ const colorName = (sticker: FaceLetter) => t(`color.${sticker}`)
 const spinClass = computed(() => {
   const move = props.animatingMove ?? props.currentMove ?? ''
   const mod  = move.slice(1)
-  if (mod === '2')  return 'half'
-  if (mod === "'") return 'ccw'
+  if (mod === '2')  {return 'half'}
+  if (mod === "'") {return 'ccw'}
   return 'cw'
 })
 
 const animClass = computed(() => {
-  if (!isAnimating.value || !props.animatingMove) return null
+  if (!isAnimating.value || !props.animatingMove) {return null}
   const f   = props.face
   const mod = props.animatingMove.slice(1)
   const axis = (f === 'U' || f === 'D') ? 'x'
@@ -47,7 +45,7 @@ const animClass = computed(() => {
 })
 
 const activeGlow = computed(() => {
-  if (!isActive.value && !isAnimating.value) return {}
+  if (!isActive.value && !isAnimating.value) {return {}}
   const color = FACE_BG[props.face]
   return { borderColor: color, boxShadow: `0 0 0 2px ${color}, 0 0 20px ${color}55` }
 })
@@ -75,18 +73,18 @@ function cellStyle(sticker: FaceLetter, idx: number) {
           <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <!-- Тихий трек -->
             <circle cx="32" cy="32" r="23"
-              stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+              stroke="rgba(255,255,255,0.15)" stroke-width="3" />
             <!-- Дуга ~300° через stroke-dasharray -->
             <circle cx="32" cy="32" r="23"
               stroke="white" stroke-width="4.5"
               stroke-linecap="round"
               stroke-dasharray="120 24"
               transform="rotate(-90 32 32)"
-              style="filter: drop-shadow(0 0 6px rgba(255,255,255,0.7))"/>
+              style="filter: drop-shadow(0 0 6px rgba(255,255,255,0.7))" />
             <!-- Наконечник стрелки в конце дуги (≈ 8 часов) -->
             <path d="M 11.5 43 L 9 33 L 19 35"
               stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
-              style="filter: drop-shadow(0 0 5px rgba(255,255,255,0.8))"/>
+              style="filter: drop-shadow(0 0 5px rgba(255,255,255,0.8))" />
           </svg>
         </div>
       </div>

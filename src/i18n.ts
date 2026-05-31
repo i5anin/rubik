@@ -49,11 +49,13 @@ type SavedKey      = `saved.${'title' | 'export' | 'import' | 'empty' | 'empty.h
 type AlgoKey       = `algo.${'title' | 'author' | 'guarantee' | 'guarantee.v' | 'time' | 'lib' | 'desc' | 'notation'}` | `algo.notation.${'cw' | 'ccw' | '180'}`
 type HeaderKey     = `header.${'github' | 'donate' | 'copied'}`
 
+type MetaKey = `meta.${'title' | 'description'}`
+
 export type TranslationKey =
   | 'app.title' | 'app.hint' | 'palette.label' | 'step.done'
   | FaceKey | ColorKey | SubKey
   | MoveLookKey | MoveActionKey
-  | BtnKey | ValidKey | SolutionKey | SavedKey | AlgoKey | HeaderKey
+  | BtnKey | ValidKey | SolutionKey | SavedKey | AlgoKey | HeaderKey | MetaKey
 
 // ── Dictionary ────────────────────────────────────────────────────────────
 
@@ -159,6 +161,16 @@ const dict: Record<TranslationKey, DictEntry> = {
   'header.github': { ru: 'GitHub репозиторий', en: 'GitHub repository' },
   'header.donate': { ru: 'Поддержать',         en: 'Donate' },
   'header.copied': { ru: 'Скопировано!',        en: 'Copied!' },
+
+  // Document meta (SEO — updated live on language switch)
+  'meta.title': {
+    ru: 'Кубик Рубика — Решатель онлайн',
+    en: "Rubik's Cube Solver — Online",
+  },
+  'meta.description': {
+    ru: 'Введите развёртку кубика по цветам, проверьте корректность и соберите его за ≤20 ходов с пошаговой анимацией.',
+    en: 'Paint your scrambled cube, validate it, and solve it in ≤20 moves — animated, step by step.',
+  },
 }
 
 // ── Public API ────────────────────────────────────────────────────────────

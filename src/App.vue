@@ -13,6 +13,9 @@ import ValidationChip from './components/ValidationChip.vue'
 import { useCube } from './composables/useCube'
 import { useSolver } from './composables/useSolver'
 import { useSavedConfigs } from './composables/useSavedConfigs'
+import { useDocumentMeta } from './composables/useDocumentMeta'
+
+useDocumentMeta()
 
 const { faces, setCell, resetAll, toKociemba, fromKociemba, validation, colorCounts } = useCube()
 const { solve, solving, rawSolution, solveError, steps, clear } = useSolver()

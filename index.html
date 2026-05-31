@@ -3,11 +3,83 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Кубик Рубика — Решатель</title>
+
+    <!-- Dark theme from the very first paint (no white flash before CSS loads) -->
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0f0f0f" />
+
+    <!-- SEO -->
+    <title>Кубик Рубика — Решатель онлайн | Rubik's Cube Solver</title>
+    <meta
+      name="description"
+      content="Введите развёртку кубика Рубика по цветам, проверьте корректность и получите оптимальное решение (≤20 ходов, алгоритм Коцьембы) с пошаговой анимацией. Rubik's Cube solver — paint, validate, solve."
+    />
+    <meta
+      name="keywords"
+      content="кубик рубика, решатель, собрать кубик, rubik, rubiks cube, cube solver, kociemba, алгоритм, 3x3"
+    />
+    <meta name="author" content="Sergey Isanin" />
+    <link rel="canonical" href="https://github.com/i5anin/rubik" />
+
+    <!-- Open Graph (social previews) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Кубик Рубика — Решатель онлайн" />
+    <meta
+      property="og:description"
+      content="Покрасьте грани, проверьте куб и соберите его за ≤20 ходов с пошаговой анимацией."
+    />
+    <meta property="og:image" content="/banner.svg" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Rubik's Cube Solver" />
+    <meta
+      name="twitter:description"
+      content="Paint your cube, validate it, solve it in ≤20 moves — animated, step by step."
+    />
+    <meta name="twitter:image" content="/banner.svg" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Inline fallback: dark background + spinner before the bundle mounts -->
+    <style>
+      html, body {
+        margin: 0;
+        background: #0f0f0f;
+        color: #e8e8e8;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      #app:empty::before {
+        content: "";
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 34px;
+        height: 34px;
+        margin: -17px 0 0 -17px;
+        border: 3px solid #2a2a2a;
+        border-top-color: #2dc653;
+        border-radius: 50%;
+        animation: app-spin 0.8s linear infinite;
+      }
+      @keyframes app-spin { to { transform: rotate(360deg); } }
+    </style>
   </head>
   <body>
     <div id="app"></div>
+
+    <noscript>
+      <div style="max-width:420px;margin:18vh auto;padding:0 24px;text-align:center">
+        <h1 style="font-size:22px;font-weight:800">🧩 Кубик Рубика</h1>
+        <p style="color:#888;line-height:1.6">
+          Для работы решателя нужен включённый JavaScript.<br />
+          This Rubik's Cube solver requires JavaScript to be enabled.
+        </p>
+      </div>
+    </noscript>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

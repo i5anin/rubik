@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { GITHUB_URL, CRYPTO_ADDR, CRYPTO_LABEL } from '../config'
+import { t, lang, toggleLang } from '../i18n'
 import AlgoInfo from './AlgoInfo.vue'
 
 const copied = ref(false)
@@ -15,14 +16,14 @@ async function copyAddr() {
 <template>
   <div class="links">
 
+    <!-- Переключатель языка -->
+    <button class="lang-btn" :title="lang === 'ru' ? 'Switch to English' : 'Переключить на русский'" @click="toggleLang">
+      <span class="lang-flag">{{ lang === 'ru' ? '🇷🇺' : '🇺🇸' }}</span>
+      <span class="lang-code">{{ lang === 'ru' ? 'RU' : 'EN' }}</span>
+    </button>
+
     <!-- GitHub -->
-    <a
-      :href="GITHUB_URL"
-      target="_blank"
-      rel="noopener"
-      class="icon-btn"
-      title="GitHub репозиторий"
-    >
+    <a :href="GITHUB_URL" target="_blank" rel="noopener" class="icon-btn" :title="t('header.github')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57
                  0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695
@@ -35,62 +36,51 @@ async function copyAddr() {
       </svg>
     </a>
 
-    <!-- Crypto wallet -->
-    <div class="crypto-wrap">
-      <button
-        class="icon-btn crypto-btn"
-        :class="{ copied }"
-        :title="copied ? 'Скопировано!' : `${CRYPTO_LABEL}: ${CRYPTO_ADDR}`"
-        @click="copyAddr"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-          <path d="M15.5 8.5c-.83-1.5-2.17-2.5-3.5-2.5-2.21 0-4 2.24-4 5s1.79 5 4 5c1.33 0 2.67-1 3.5-2.5"/>
-          <path d="M8 12h8"/>
-        </svg>
-        <span class="crypto-label">{{ copied ? 'Скопировано!' : 'Donate' }}</span>
-      </button>
-    </div>
+    <!-- Crypto -->
+    <button
+      class="icon-btn crypto-btn"
+      :class="{ copied }"
+      :title="copied ? t('header.copied') : `${CRYPTO_LABEL}: ${CRYPTO_ADDR}`"
+      @click="copyAddr"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9.5 8.5c.83-1.5 2.17-2.5 3.5-2.5 2.21 0 4 2.24 4 5s-1.79 5-4 5c-1.33 0-2.67-1-3.5-2.5"/>
+        <path d="M7 12h10"/>
+      </svg>
+      <span class="crypto-label">{{ copied ? t('header.copied') : t('header.donate') }}</span>
+    </button>
 
     <!-- Алгоритм -->
     <AlgoInfo />
-
   </div>
 </template>
 
 <style scoped>
-.links {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.links { display:flex; align-items:center; gap:8px; }
 
+/* Переключатель языка */
+.lang-btn {
+  display:flex; align-items:center; gap:5px;
+  background:#1e1e1e; border:1px solid #2a2a2a; border-radius:8px;
+  color:#bbb; font-size:12px; font-weight:700; padding:6px 10px;
+  cursor:pointer; transition:color .15s,border-color .15s,background .15s;
+}
+.lang-btn:hover { color:#fff; border-color:#555; background:#252525; }
+.lang-flag { font-size:14px; line-height:1; }
+.lang-code { font-size:11px; letter-spacing:.05em; }
+
+/* Общая кнопка-иконка */
 .icon-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #1e1e1e;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
-  color: #888;
-  text-decoration: none;
-  font-size: 12px;
-  padding: 7px 10px;
-  cursor: pointer;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  display:flex; align-items:center; gap:6px;
+  background:#1e1e1e; border:1px solid #2a2a2a; border-radius:8px;
+  color:#888; text-decoration:none; font-size:12px; padding:7px 10px;
+  cursor:pointer; transition:color .15s,border-color .15s,background .15s;
 }
+.icon-btn:hover { color:#ddd; border-color:#444; background:#252525; }
+a.icon-btn:hover { color:#fff; }
 
-.icon-btn:hover {
-  color: #ddd;
-  border-color: #444;
-  background: #252525;
-}
-
-/* GitHub hover */
-a.icon-btn:hover { color: #fff; }
-
-/* Crypto */
-.crypto-btn { gap: 6px; }
-.crypto-btn.copied { color: #2dc653; border-color: #2dc65344; }
-.crypto-label { font-size: 11px; font-weight: 600; }
+.crypto-btn { gap:6px; }
+.crypto-btn.copied { color:#2dc653; border-color:#2dc65344; }
+.crypto-label { font-size:11px; font-weight:600; }
 </style>

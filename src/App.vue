@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import type { FaceLetter } from './types/cube'
 import { FACE_ORDER, FACE_BG, FACE_TEXT, FACE_SUBLABEL } from './types/cube'
+import { t } from './i18n'
 import FaceGrid from './components/FaceGrid.vue'
 import SolutionPanel from './components/SolutionPanel.vue'
 import SavedConfigs from './components/SavedConfigs.vue'
@@ -17,6 +18,7 @@ const { configs, save, remove, rename, exportJson, importJson } = useSavedConfig
 
 const activePaint = ref<FaceLetter>('R')
 const saveMsg = ref('')
+
 
 // Пошаговое выполнение
 const completedCount = ref(0)
@@ -101,7 +103,7 @@ function handleStepUndo() {
 function handleSave() {
   if (!validation.value.ok) return
   save(toKociemba())
-  saveMsg.value = 'Сохранено!'
+  saveMsg.value = t('btn.saved')
   setTimeout(() => (saveMsg.value = ''), 1800)
 }
 
@@ -131,18 +133,15 @@ async function handleImport(file: File) {
         <div class="header-icon">
           <img src="/favicon.svg" width="36" height="36" alt="cube" />
         </div>
-        <h1>Кубик Рубика</h1>
+        <h1>{{ t('app.title') }}</h1>
         <HeaderLinks class="header-links" />
       </div>
-      <p class="hint">
-        Держи куб: <strong>белый верх</strong>, <strong>зелёный к тебе</strong>.
-        Кликай клетки, чтобы покрасить. Наводи — увидишь цвет.
-      </p>
+      <p class="hint" v-html="t('app.hint')" />
     </header>
 
     <!-- Палитра цветов -->
     <section class="palette-row">
-      <span class="palette-label">Цвет кисти:</span>
+      <span class="palette-label">{{ t('palette.label') }}</span>
       <div class="palette">
         <button
           v-for="face in FACE_ORDER"
@@ -200,30 +199,22 @@ async function handleImport(file: File) {
 
     <!-- Кнопки -->
     <section class="actions">
-      <button class="btn btn-ghost" @click="handleReset">↺ Сброс</button>
-      <button class="btn btn-scramble" @click="handleScramble">🎲 Скрамбл</button>
+      <button class="btn btn-ghost" @click="handleReset">{{ t('btn.reset') }}</button>
+      <button class="btn btn-scramble" @click="handleScramble">{{ t('btn.scramble') }}</button>
 
       <ValidationChip
         :ok="validation.ok"
-        :msg="validation.msg"
+        :error-face="validation.errorFace"
+        :error-count="validation.errorCount"
         :color-counts="colorCounts"
       />
 
-      <button
-        class="btn btn-save"
-        :disabled="!validation.ok"
-        @click="handleSave"
-        :title="saveMsg || 'Сохранить текущее состояние'"
-      >
-        {{ saveMsg || '💾 Сохранить' }}
+      <button class="btn btn-save" :disabled="!validation.ok" @click="handleSave">
+        {{ saveMsg || t('btn.save') }}
       </button>
 
-      <button
-        class="btn btn-primary"
-        :disabled="!validation.ok || solving"
-        @click="handleSolve"
-      >
-        {{ solving ? 'Считаю...' : 'Решить ↗' }}
+      <button class="btn btn-primary" :disabled="!validation.ok || solving" @click="handleSolve">
+        {{ solving ? t('btn.solving') : t('btn.solve') }}
       </button>
     </section>
 

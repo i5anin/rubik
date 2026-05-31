@@ -1,6 +1,6 @@
 import { reactive, computed } from 'vue'
 import type { FaceLetter } from '../types/cube'
-import { FACE_ORDER, FACE_LABEL } from '../types/cube'
+import { FACE_ORDER } from '../types/cube'
 
 /** Начальное состояние — решённый куб (каждая грань одного цвета) */
 function makeSolvedFaces(): Record<FaceLetter, FaceLetter[]> {
@@ -39,21 +39,13 @@ export function useCube() {
   }
 
   /** Валидация состояния */
-  const validation = computed<{ ok: boolean; msg: string }>(() => {
+  const validation = computed<{ ok: boolean; errorFace?: FaceLetter; errorCount?: number }>(() => {
     const s = toKociemba()
-
-    // Каждый цвет ровно 9 раз
     for (const face of FACE_ORDER) {
       const count = [...s].filter(c => c === face).length
-      if (count !== 9) {
-        return {
-          ok: false,
-          msg: `«${FACE_LABEL[face]}» цвет: ${count} / 9`,
-        }
-      }
+      if (count !== 9) return { ok: false, errorFace: face, errorCount: count }
     }
-
-    return { ok: true, msg: '✓ Состояние корректно' }
+    return { ok: true }
   })
 
   /** Загрузить состояние из 54-символьной kociemba-строки (U/R/F/D/L/B) */

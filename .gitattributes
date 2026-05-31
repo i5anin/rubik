@@ -1,0 +1,7 @@
+# Normalise line endings — silences the LF↔CRLF warnings on Windows checkouts.
+* text=auto eol=lf
+
+# Binary / generated assets
+*.svg   text eol=lf
+*.png   binary
+*.ico   binary

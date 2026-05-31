@@ -64,6 +64,8 @@ const config: Linter.Config[] = [
 
       // --- Vue ---
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+      // "Icon" is a conventional base-component name (like RouterView).
+      'vue/multi-word-component-names': ['error', { ignores: ['Icon'] }],
       'vue/no-unused-vars': 'error',
       'vue/no-v-html': 'warn',
       'vue/define-macros-order': ['error', {
@@ -88,6 +90,13 @@ const config: Linter.Config[] = [
       'eqeqeq': ['error', 'always'],
       'curly': ['error', 'all'],
     },
+  },
+
+  // Icon.vue renders a fixed internal SVG string via v-html by design — must
+  // come after the project rules block to override its 'vue/no-v-html'.
+  {
+    files: ['src/components/Icon.vue'],
+    rules: { 'vue/no-v-html': 'off' },
   },
 ]
 

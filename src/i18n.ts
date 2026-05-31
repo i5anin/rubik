@@ -69,7 +69,7 @@ const dict: Record<TranslationKey, DictEntry> = {
     en: 'Hold: <b>white top</b>, <b>green front</b>. Click cells to paint. Hover to see colour.',
   },
   'palette.label': { ru: 'Цвет кисти:',  en: 'Paint colour:' },
-  'step.done':     { ru: 'Готово ✓',     en: 'Done ✓' },
+  'step.done':     { ru: 'Готово',       en: 'Done' },
 
   // Faces
   'face.U': { ru: 'Верх',  en: 'Up' },
@@ -95,26 +95,26 @@ const dict: Record<TranslationKey, DictEntry> = {
   'sub.L': { ru: 'Orange', en: 'Orange' },
   'sub.B': { ru: 'Blue',   en: 'Blue' },
 
-  // Buttons
-  'btn.reset':    { ru: '↺ Сброс',      en: '↺ Reset' },
-  'btn.scramble': { ru: '🎲 Скрамбл',   en: '🎲 Scramble' },
-  'btn.save':     { ru: '💾 Сохранить', en: '💾 Save' },
-  'btn.saved':    { ru: 'Сохранено!',   en: 'Saved!' },
-  'btn.solve':    { ru: 'Решить ↗',     en: 'Solve ↗' },
-  'btn.solving':  { ru: 'Считаю…',      en: 'Solving…' },
+  // Buttons (icons live in the template, not in the string)
+  'btn.reset':    { ru: 'Сброс',      en: 'Reset' },
+  'btn.scramble': { ru: 'Скрамбл',    en: 'Scramble' },
+  'btn.save':     { ru: 'Сохранить',  en: 'Save' },
+  'btn.saved':    { ru: 'Сохранено!', en: 'Saved!' },
+  'btn.solve':    { ru: 'Решить',     en: 'Solve' },
+  'btn.solving':  { ru: 'Считаю…',    en: 'Solving…' },
 
   // Validation
-  'valid.ok':            { ru: '✓ Состояние корректно', en: '✓ State is valid' },
+  'valid.ok':            { ru: 'Состояние корректно',   en: 'State is valid' },
   'valid.tooltip.title': { ru: 'Что проверяется:',      en: 'Validation checks:' },
   'valid.centers':       { ru: 'Центры граней:',         en: 'Face centres:' },
-  'valid.centers.ok':    { ru: '✓ зафиксированы',        en: '✓ locked' },
+  'valid.centers.ok':    { ru: 'зафиксированы',          en: 'locked' },
   'valid.parity':        { ru: 'Чётность перестановок:', en: 'Permutation parity:' },
   'valid.parity.note':   { ru: 'проверяет солвер',       en: 'checked by solver' },
 
   // Solution
   'solution.title':   { ru: 'Решение',                en: 'Solution' },
-  'solution.done':    { ru: '🎉 Готово! Куб собран!', en: '🎉 Done! Cube solved!' },
-  'solution.already': { ru: 'Куб уже собран! 🎉',     en: 'Cube is already solved! 🎉' },
+  'solution.done':    { ru: 'Готово! Куб собран!',    en: 'Done! Cube solved!' },
+  'solution.already': { ru: 'Куб уже собран!',        en: 'Cube is already solved!' },
   'solution.move.1':  { ru: 'ход',                    en: 'move' },
   'solution.move.2':  { ru: 'хода',                   en: 'moves' },
   'solution.move.5':  { ru: 'ходов',                  en: 'moves' },
@@ -126,16 +126,16 @@ const dict: Record<TranslationKey, DictEntry> = {
   'move.look.D': { ru: 'смотришь снизу',   en: 'look from below' },
   'move.look.L': { ru: 'смотришь слева',   en: 'look from left' },
   'move.look.B': { ru: 'смотришь сзади',   en: 'look from behind' },
-  'move.cw':     { ru: 'крути по часовой ↻',    en: 'clockwise ↻' },
-  'move.ccw':    { ru: 'крути против часовой ↺', en: 'counter-clockwise ↺' },
-  'move.two':    { ru: 'два щелчка ↻↻',          en: 'two clicks ↻↻' },
+  'move.cw':     { ru: 'крути по часовой',      en: 'turn clockwise' },
+  'move.ccw':    { ru: 'крути против часовой',  en: 'turn counter-clockwise' },
+  'move.two':    { ru: 'два щелчка (180°)',     en: 'two turns (180°)' },
 
   // Saved configurations
   'saved.title':      { ru: 'Сохранённые',                    en: 'Saved' },
-  'saved.export':     { ru: '⬇ Экспорт',                      en: '⬇ Export' },
-  'saved.import':     { ru: '⬆ Импорт',                       en: '⬆ Import' },
+  'saved.export':     { ru: 'Экспорт',                        en: 'Export' },
+  'saved.import':     { ru: 'Импорт',                         en: 'Import' },
   'saved.empty':      { ru: 'Нет сохранённых конфигураций.',   en: 'No saved configurations.' },
-  'saved.empty.hint': { ru: 'Нажми 💾 Сохранить после ввода.', en: 'Click 💾 Save after entering the cube.' },
+  'saved.empty.hint': { ru: 'Нажми «Сохранить» после ввода.', en: 'Click "Save" after entering the cube.' },
   'saved.load':       { ru: 'Загрузить на куб',               en: 'Load to cube' },
   'saved.rename':     { ru: 'Переименовать',                  en: 'Rename' },
   'saved.delete':     { ru: 'Удалить',                        en: 'Delete' },

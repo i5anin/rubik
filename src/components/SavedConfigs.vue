@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import type { SavedConfig } from '../composables/useSavedConfigs'
 import { t } from '../i18n'
+import Icon from './Icon.vue'
 
 defineProps<{ configs: SavedConfig[] }>()
 const emit = defineEmits<{
@@ -38,8 +39,12 @@ function onFileChange(e: Event) {
         <span v-if="configs.length" class="saved-count">{{ configs.length }}</span>
       </div>
       <div class="io-btns">
-        <button class="io-btn" :disabled="!configs.length" @click="emit('export')">{{ t('saved.export') }}</button>
-        <button class="io-btn io-import" @click="triggerImport">{{ t('saved.import') }}</button>
+        <button class="io-btn" :disabled="!configs.length" @click="emit('export')">
+          <Icon name="download" /> {{ t('saved.export') }}
+        </button>
+        <button class="io-btn io-import" @click="triggerImport">
+          <Icon name="upload" /> {{ t('saved.import') }}
+        </button>
         <input ref="fileInput" type="file" accept=".json" style="display:none" @change="onFileChange" />
       </div>
     </div>
@@ -53,9 +58,9 @@ function onFileChange(e: Event) {
           <span class="saved-date">{{ c.savedAt }}</span>
         </div>
         <div class="saved-actions">
-          <button class="act-btn act-load" :title="t('saved.load')" @click="emit('load', c.state)">↩</button>
-          <button class="act-btn act-edit" :title="t('saved.rename')" @click="startEdit(c)">✏</button>
-          <button class="act-btn act-del" :title="t('saved.delete')" @click="emit('remove', c.id)">✕</button>
+          <button class="act-btn act-load" :title="t('saved.load')" @click="emit('load', c.state)"><Icon name="undo" /></button>
+          <button class="act-btn act-edit" :title="t('saved.rename')" @click="startEdit(c)"><Icon name="pencil" /></button>
+          <button class="act-btn act-del" :title="t('saved.delete')" @click="emit('remove', c.id)"><Icon name="close" /></button>
         </div>
       </div>
     </div>
@@ -75,6 +80,7 @@ function onFileChange(e: Event) {
 .saved-count { font-size:11px; background:#2a2a2a; color:#888; padding:2px 7px; border-radius:20px; }
 .io-btns { display:flex; gap:6px; }
 .io-btn {
+  display:inline-flex; align-items:center; gap:5px;
   background:#222; border:1px solid #333; border-radius:7px; color:#888;
   font-size:12px; font-weight:600; padding:5px 12px; cursor:pointer; transition:color .1s,border-color .1s;
 }

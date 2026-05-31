@@ -10,6 +10,7 @@ import SolutionPanel from './components/SolutionPanel.vue'
 import SavedConfigs from './components/SavedConfigs.vue'
 import HeaderLinks from './components/HeaderLinks.vue'
 import ValidationChip from './components/ValidationChip.vue'
+import Icon from './components/Icon.vue'
 import { useCube } from './composables/useCube'
 import { useSolver } from './composables/useSolver'
 import { useSavedConfigs } from './composables/useSavedConfigs'
@@ -139,6 +140,8 @@ async function handleImport(file: File) {
         </a>
         <HeaderLinks />
       </div>
+      <!-- app.hint is a static i18n string with <b> tags, never user input -->
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <p class="hint" v-html="t('app.hint')" />
     </header>
 
@@ -202,8 +205,12 @@ async function handleImport(file: File) {
 
     <!-- Кнопки -->
     <section class="actions">
-      <button class="btn btn-ghost" @click="handleReset">{{ t('btn.reset') }}</button>
-      <button class="btn btn-scramble" @click="handleScramble">{{ t('btn.scramble') }}</button>
+      <button class="btn btn-ghost" @click="handleReset">
+        <Icon name="reset" /> {{ t('btn.reset') }}
+      </button>
+      <button class="btn btn-scramble" @click="handleScramble">
+        <Icon name="shuffle" /> {{ t('btn.scramble') }}
+      </button>
 
       <ValidationChip
         :ok="validation.ok"
@@ -213,11 +220,11 @@ async function handleImport(file: File) {
       />
 
       <button class="btn btn-save" :disabled="!validation.ok" @click="handleSave">
-        {{ saveMsg || t('btn.save') }}
+        <Icon name="save" /> {{ saveMsg || t('btn.save') }}
       </button>
 
       <button class="btn btn-primary" :disabled="!validation.ok || solving" @click="handleSolve">
-        {{ solving ? t('btn.solving') : t('btn.solve') }}
+        {{ solving ? t('btn.solving') : t('btn.solve') }} <Icon v-if="!solving" name="solve" />
       </button>
     </section>
 
@@ -226,7 +233,7 @@ async function handleImport(file: File) {
 
     <!-- Ошибка солвера -->
     <div v-if="solveError" class="error-box">
-      ⚠ {{ solveError }}
+      <Icon name="alert" /> {{ solveError }}
     </div>
 
     <!-- Решение -->
@@ -352,6 +359,9 @@ h1 {
 }
 
 .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   padding: 10px 18px;
   border: none;
   border-radius: 9px;
@@ -370,13 +380,16 @@ h1 {
 
 
 .error-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background: rgba(230,57,70,0.1);
   border: 1px solid #e63946;
   border-radius: 9px;
   padding: 12px 18px;
   font-size: 13px;
   color: #e63946;
-  text-align: center;
 }
 
 .notice-box {

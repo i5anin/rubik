@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { t } from '../i18n'
+import Icon from './Icon.vue'
 const show = ref(false)
 
 </script>
 
 <template>
   <div class="wrap" @mouseenter="show = true" @mouseleave="show = false">
-    <button class="algo-btn" :title="t('algo.title')">⚙</button>
+    <button class="algo-btn" :title="t('algo.title')"><Icon name="info" /></button>
     <Transition name="pop">
       <div v-if="show" class="popover">
         <div class="pop-title">{{ t('algo.title') }}</div>

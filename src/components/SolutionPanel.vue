@@ -4,6 +4,7 @@ import type { SolveStep } from '../composables/useSolver'
 import { FACE_BG, FACE_TEXT } from '../types/cube'
 import type { FaceLetter } from '../types/cube'
 import { t, describeMove, pluralMoves } from '../i18n'
+import Icon from './Icon.vue'
 
 const props = defineProps<{
   raw: string
@@ -58,16 +59,20 @@ const stepDesc = (move: string) => describeMove(move)
       <div class="progress-fill" :style="{ width: progress + '%' }" />
     </div>
 
-    <div v-if="steps.length === 0" class="solved-msg">{{ t('solution.already') }}</div>
-    <div v-else-if="isDone" class="done-msg">{{ t('solution.done') }}</div>
+    <div v-if="steps.length === 0" class="solved-msg">
+      <Icon name="check-circle" /> {{ t('solution.already') }}
+    </div>
+    <div v-else-if="isDone" class="done-msg">
+      <Icon name="sparkles" /> {{ t('solution.done') }}
+    </div>
 
     <div v-else>
       <div class="raw-line">{{ raw }}</div>
       <div class="steps">
         <div v-for="(step, idx) in steps" :key="step.n" class="step" :class="stepState(idx)">
           <span class="step-status">
-            <span v-if="stepState(idx) === 'done'" class="icon-done">✓</span>
-            <span v-else-if="stepState(idx) === 'current'" class="icon-cur">▶</span>
+            <Icon v-if="stepState(idx) === 'done'" name="check" class="icon-done" />
+            <Icon v-else-if="stepState(idx) === 'current'" name="chevron" class="icon-cur" />
             <span v-else class="step-n">{{ step.n }}</span>
           </span>
 
@@ -80,13 +85,13 @@ const stepDesc = (move: string) => describeMove(move)
               class="btn-undo"
               :title="t('saved.undo')"
               @click="emit('step-undo')"
-            >↩</button>
+            ><Icon name="undo" /></button>
             <button
               v-if="stepState(idx) === 'current'"
               class="btn-done"
               :disabled="isAnimating"
               @click="emit('step-complete', step.move)"
-            >{{ t('step.done') }}</button>
+            ><Icon name="check" /> {{ t('step.done') }}</button>
           </div>
         </div>
       </div>
@@ -105,7 +110,10 @@ const stepDesc = (move: string) => describeMove(move)
 .progress-bar { height:3px; background:#2a2a2a; border-radius:2px; margin-bottom:14px; overflow:hidden; }
 .progress-fill { height:100%; background:#2dc653; border-radius:2px; transition:width .3s ease; }
 
-.solved-msg,.done-msg { font-size:16px; font-weight:700; padding:12px 0; color:#2dc653; text-align:center; }
+.solved-msg,.done-msg {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  font-size:16px; font-weight:700; padding:12px 0; color:#2dc653;
+}
 
 .raw-line {
   font-family:'JetBrains Mono','Fira Code',Consolas,monospace; font-size:12px;
@@ -123,9 +131,9 @@ const stepDesc = (move: string) => describeMove(move)
 .step.current { background:#1e2a1e; border-color:#2dc653; }
 .step.upcoming{ background:#191919; opacity:.7; }
 
-.step-status { width:22px; text-align:center; flex-shrink:0; font-size:12px; }
-.icon-done { color:#2dc653; font-weight:700; font-size:13px; }
-.icon-cur  { color:#2dc653; font-size:11px; }
+.step-status { width:22px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.icon-done { color:#2dc653; width:14px; height:14px; }
+.icon-cur  { color:#2dc653; width:13px; height:13px; }
 .step-n    { font-size:11px; color:#444; }
 
 .step-desc { font-size:13px; color:#aaa; flex:1; min-width:0; }
@@ -135,6 +143,7 @@ const stepDesc = (move: string) => describeMove(move)
 .step-actions { display:flex; gap:5px; flex-shrink:0; margin-left:auto; }
 
 .btn-done {
+  display:inline-flex; align-items:center; gap:5px;
   background:#2dc653; color:#000; border:none; border-radius:6px;
   padding:5px 12px; font-size:12px; font-weight:700; cursor:pointer;
   transition:opacity .1s,transform .1s; white-space:nowrap;
@@ -143,8 +152,9 @@ const stepDesc = (move: string) => describeMove(move)
 .btn-done:disabled { opacity:.4; cursor:not-allowed; }
 
 .btn-undo {
+  display:inline-flex; align-items:center; justify-content:center;
   background:#2a2a2a; color:#888; border:1px solid #333;
-  border-radius:6px; padding:4px 10px; font-size:13px; cursor:pointer;
+  border-radius:6px; padding:5px 9px; cursor:pointer;
 }
 .btn-undo:hover { color:#ffd60a; }
 </style>

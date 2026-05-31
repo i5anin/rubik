@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import type { FaceLetter } from '../types/cube'
 import { FACE_ORDER, FACE_BG } from '../types/cube'
 import { t } from '../i18n'
+import Icon from './Icon.vue'
 
 const props = defineProps<{
   ok: boolean
@@ -36,7 +37,10 @@ const rows = computed(() =>
 
 <template>
   <div class="chip-wrap" @mouseenter="show = true" @mouseleave="show = false">
-    <div class="chip" :class="ok ? 'ok' : 'err'">{{ chipMsg }}</div>
+    <div class="chip" :class="ok ? 'ok' : 'err'">
+      <Icon :name="ok ? 'check-circle' : 'close'" />
+      {{ chipMsg }}
+    </div>
 
     <Transition name="pop">
       <div v-if="show" class="tooltip-box">
@@ -50,9 +54,8 @@ const rows = computed(() =>
                 :style="{ width: (r.count / 9 * 100) + '%', background: r.bg }" />
             </div>
             <span class="tt-count" :class="{ err: !r.ok }">{{ r.count }}/9</span>
-            <span class="tt-icon" :style="{ color: r.ok ? '#2dc653' : '#e63946' }">
-              {{ r.ok ? '✓' : '✗' }}
-            </span>
+            <Icon :name="r.ok ? 'check' : 'close'" class="tt-icon"
+              :style="{ color: r.ok ? '#2dc653' : '#e63946' }" />
           </div>
         </div>
         <div class="tt-divider" />
@@ -72,6 +75,7 @@ const rows = computed(() =>
 <style scoped>
 .chip-wrap { position:relative; display:inline-block; }
 .chip {
+  display:inline-flex; align-items:center; gap:6px;
   font-size:13px; padding:7px 14px; border-radius:20px;
   font-weight:500; cursor:default; user-select:none; transition:opacity .15s;
 }
@@ -94,7 +98,7 @@ const rows = computed(() =>
 .tt-bar-fill.err { background:#e63946!important; }
 .tt-count     { font-size:11px; color:#666; width:26px; text-align:right; flex-shrink:0; }
 .tt-count.err { color:#e63946; font-weight:700; }
-.tt-icon      { font-size:12px; width:14px; flex-shrink:0; }
+.tt-icon      { width:13px; height:13px; flex-shrink:0; }
 .tt-divider   { border:none; border-top:1px solid #2a2a2a; margin:10px 0 8px; }
 .tt-footer    { display:flex; justify-content:space-between; font-size:11px; color:#555; }
 .tt-ok   { color:#2dc653; }

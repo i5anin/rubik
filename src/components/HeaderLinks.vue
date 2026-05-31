@@ -48,7 +48,7 @@ async function copyAddr() {
       @click="copyAddr"
     >
       <!-- Ethereum diamond logo -->
-      <svg width="14" height="14" viewBox="0 0 256 417" fill="currentColor" aria-hidden="true">
+      <svg class="eth-icon" width="14" height="14" viewBox="0 0 256 417" fill="currentColor" aria-hidden="true">
         <path d="M127.96 0l-2.79 9.5v275.67l2.79 2.78 127.96-75.64z" opacity="0.6" />
         <path d="M127.96 0L0 212.32l127.96 75.64V154.16z" />
         <path d="M127.96 312.19l-1.57 1.92v98.2l1.57 4.6L256 236.59z" opacity="0.6" />
@@ -89,6 +89,19 @@ async function copyAddr() {
 a.icon-btn:hover { color:#fff; }
 
 .crypto-btn { gap:6px; }
+.crypto-btn:hover { border-color:#a78bfa66; }
 .crypto-btn.copied { color:#2dc653; border-color:#2dc65344; }
 .crypto-label { font-size:11px; font-weight:600; }
+
+/* Ethereum mark — always violet with a soft glow, independent of button text
+   colour (stays violet even on the green "copied" state). */
+.eth-icon {
+  color:#a78bfa;
+  filter: drop-shadow(0 0 4px rgba(167,139,250,.65));
+  transition: filter .2s ease, transform .2s ease;
+}
+.crypto-btn:hover .eth-icon {
+  filter: drop-shadow(0 0 8px rgba(167,139,250,1));
+  transform: scale(1.12);
+}
 </style>

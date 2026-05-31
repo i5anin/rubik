@@ -47,10 +47,14 @@ async function copyAddr() {
       :title="copied ? t('header.copied') : `${CRYPTO_LABEL}: ${CRYPTO_ADDR}`"
       @click="copyAddr"
     >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M9.5 8.5c.83-1.5 2.17-2.5 3.5-2.5 2.21 0 4 2.24 4 5s-1.79 5-4 5c-1.33 0-2.67-1-3.5-2.5" />
-        <path d="M7 12h10" />
+      <!-- Ethereum diamond logo -->
+      <svg width="14" height="14" viewBox="0 0 256 417" fill="currentColor" aria-hidden="true">
+        <path d="M127.96 0l-2.79 9.5v275.67l2.79 2.78 127.96-75.64z" opacity="0.6" />
+        <path d="M127.96 0L0 212.32l127.96 75.64V154.16z" />
+        <path d="M127.96 312.19l-1.57 1.92v98.2l1.57 4.6L256 236.59z" opacity="0.6" />
+        <path d="M127.96 416.91v-104.72L0 236.59z" />
+        <path d="M127.96 287.96l127.96-75.64-127.96-58.16z" opacity="0.2" />
+        <path d="M0 212.32l127.96 75.64V154.16z" opacity="0.6" />
       </svg>
       <span class="crypto-label">{{ copied ? t('header.copied') : t('header.donate') }}</span>
     </button>

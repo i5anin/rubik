@@ -130,11 +130,14 @@ async function handleImport(file: File) {
     <!-- Header -->
     <header>
       <div class="header-top">
-        <div class="header-icon">
-          <img src="/favicon.svg" width="36" height="36" alt="cube" />
+        <div class="header-left" />
+        <div class="header-center">
+          <img src="/favicon.svg" width="34" height="34" alt="cube" />
+          <h1>{{ t('app.title') }}</h1>
         </div>
-        <h1>{{ t('app.title') }}</h1>
-        <HeaderLinks class="header-links" />
+        <div class="header-right">
+          <HeaderLinks />
+        </div>
       </div>
       <p class="hint" v-html="t('app.hint')" />
     </header>
@@ -262,25 +265,34 @@ async function handleImport(file: File) {
 
 header { text-align: center; }
 
+/* 3-колоночный грид: [пустой | центр | ссылки] */
 .header-top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.header-left { /* пустой балансирующий блок */ }
+
+.header-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  position: relative;
+  gap: 10px;
 }
 
-.header-links {
-  position: absolute;
-  right: 0;
+.header-right {
+  display: flex;
+  justify-content: flex-end;
 }
-
-.header-icon { flex-shrink: 0; }
 
 h1 {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.04em;
+  white-space: nowrap;
   background: linear-gradient(135deg, #f0f0f0, #aaa);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

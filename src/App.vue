@@ -332,6 +332,7 @@ h1 {
 
 /* ── Карта куба ── */
 .cube-map {
+  --cell: 42px;            /* sticker size — shrinks on phones (see media queries) */
   display: grid;
   grid-template-columns: repeat(4, auto);
   grid-template-rows: repeat(3, auto);
@@ -400,5 +401,28 @@ h1 {
   font-size: 13px;
   color: #4895ef;
   text-align: center;
+}
+
+/* ── Адаптив для телефонов ── */
+@media (max-width: 620px) {
+  .app { padding: 20px 12px 64px; gap: 22px; }
+  .cube-map { --cell: 30px; gap: 4px; }
+  h1 { font-size: 22px; }
+  .paint-btn { width: 38px; height: 38px; }
+  .palette-row { justify-content: center; }
+  .palette { flex-wrap: wrap; justify-content: center; }
+}
+
+@media (max-width: 420px) {
+  .app { padding: 16px 8px 56px; }
+  .cube-map { --cell: 25px; gap: 3px; }
+  .paint-btn { width: 34px; height: 34px; border-radius: 8px; }
+  .palette { gap: 5px; }
+  .actions { gap: 8px; }
+  .btn { padding: 9px 14px; }
+}
+
+@media (max-width: 340px) {
+  .cube-map { --cell: 21px; }
 }
 </style>

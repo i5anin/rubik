@@ -67,24 +67,23 @@ function cellStyle(sticker: FaceLetter, idx: number) {
 
     <div class="face-grid" :class="animClass" :style="activeGlow">
 
-      <!-- Красивый спиннер — всегда крутится пока шаг активен -->
+      <!-- Circular arrow — its shape shows the turn direction, and it spins
+           that way while the step is active. -->
       <div v-if="isActive || isAnimating" class="rotation-overlay">
         <div class="spin-ring" :class="spinClass">
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Тихий трек -->
-            <circle cx="32" cy="32" r="23"
-              stroke="rgba(255,255,255,0.15)" stroke-width="3" />
-            <!-- Дуга ~300° через stroke-dasharray -->
-            <circle cx="32" cy="32" r="23"
-              stroke="white" stroke-width="4.5"
-              stroke-linecap="round"
-              stroke-dasharray="120 24"
-              transform="rotate(-90 32 32)"
-              style="filter: drop-shadow(0 0 6px rgba(255,255,255,0.7))" />
-            <!-- Наконечник стрелки в конце дуги (≈ 8 часов) -->
-            <path d="M 11.5 43 L 9 33 L 19 35"
-              stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
-              style="filter: drop-shadow(0 0 5px rgba(255,255,255,0.8))" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.4"
+            stroke-linecap="round" stroke-linejoin="round"
+            style="filter: drop-shadow(0 0 5px rgba(0,0,0,0.9))">
+            <!-- clockwise arc + arrowhead -->
+            <template v-if="spinClass !== 'ccw'">
+              <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+              <path d="M21 3v5h-5" />
+            </template>
+            <!-- counter-clockwise arc + arrowhead -->
+            <template v-else>
+              <path d="M3 12a9 9 0 1 0 9-9c-2.52 0-4.93 1-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+            </template>
           </svg>
         </div>
       </div>
@@ -122,9 +121,12 @@ function cellStyle(sticker: FaceLetter, idx: number) {
 .face-sub { font-size: 10px; color: #444; }
 
 /* ── Сетка ── */
+/* --cell is set on .cube-map (App.vue) and shrinks via media queries on
+   phones so the four-faces-wide cross fits without horizontal clipping. */
 .face-grid {
   position: relative; display: grid;
-  grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(3, 42px);
+  grid-template-columns: repeat(3, var(--cell, 42px));
+  grid-template-rows: repeat(3, var(--cell, 42px));
   gap: 3px; padding: 5px; background: #1c1c1c; border-radius: 8px;
   border: 1px solid #2a2a2a; transition: border-color 0.2s, box-shadow 0.2s;
   will-change: transform;

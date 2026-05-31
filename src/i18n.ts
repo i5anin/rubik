@@ -65,8 +65,8 @@ interface DictEntry { readonly ru: string; readonly en: string }
 const dict: Record<TranslationKey, DictEntry> = {
   'app.title':    { ru: 'Кубик Рубика',        en: "Rubik's Cube" },
   'app.hint':     {
-    ru: 'Держи куб: <b>белый верх</b>, <b>зелёный к тебе</b>. Кликай клетки, чтобы покрасить. Наводи — увидишь цвет.',
-    en: 'Hold: <b>white top</b>, <b>green front</b>. Click cells to paint. Hover to see colour.',
+    ru: 'Держи куб <b>белой гранью вверх</b> и <b>зелёной к себе</b>. Нажимай на клетки, чтобы раскрасить грани. Наведи на клетку — покажу её цвет.',
+    en: 'Hold the cube <b>white face up</b> and <b>green face toward you</b>. Click the stickers to paint them. Hover over a sticker to see its colour.',
   },
   'palette.label': { ru: 'Цвет кисти:',  en: 'Paint colour:' },
   'step.done':     { ru: 'Готово',       en: 'Done' },

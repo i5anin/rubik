@@ -36,12 +36,12 @@ const spinClass = computed(() => {
 
 const animClass = computed(() => {
   if (!isAnimating.value || !props.animatingMove) {return null}
-  const f   = props.face
+  // The face is viewed head-on, so a layer turn is an in-plane rotation
+  // around the face centre — the stickers travel along a circle, they do
+  // not flip like a closing book.
   const mod = props.animatingMove.slice(1)
-  const axis = (f === 'U' || f === 'D') ? 'x'
-             : (f === 'R' || f === 'L') ? 'y' : 'z'
   const dir = mod === "'" ? 'ccw' : mod === '2' ? 'half' : 'cw'
-  return `anim-${axis}-${dir}`
+  return `spin-${dir}`
 })
 
 const activeGlow = computed(() => {
@@ -175,26 +175,14 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   100% { transform: rotate(360deg); }
 }
 
-/* ── 3D-анимации flip ── */
-@keyframes flip-x-cw   { 0%{transform:rotateX(0)}   50%{transform:rotateX(90deg);filter:blur(3px);opacity:.45}  100%{transform:rotateX(0)} }
-@keyframes flip-x-ccw  { 0%{transform:rotateX(0)}   50%{transform:rotateX(-90deg);filter:blur(3px);opacity:.45} 100%{transform:rotateX(0)} }
-@keyframes flip-x-half { 0%{transform:rotateX(0)}   50%{transform:rotateX(90deg);filter:blur(3px);opacity:.45}  100%{transform:rotateX(0)} }
-@keyframes flip-y-cw   { 0%{transform:rotateY(0)}   50%{transform:rotateY(90deg);filter:blur(3px);opacity:.45}  100%{transform:rotateY(0)} }
-@keyframes flip-y-ccw  { 0%{transform:rotateY(0)}   50%{transform:rotateY(-90deg);filter:blur(3px);opacity:.45} 100%{transform:rotateY(0)} }
-@keyframes flip-y-half { 0%{transform:rotateY(0)}   50%{transform:rotateY(90deg);filter:blur(3px);opacity:.45}  100%{transform:rotateY(0)} }
-@keyframes flip-z-cw   { 0%{transform:rotateZ(0)}   50%{transform:rotateZ(90deg);filter:blur(3px);opacity:.45}  100%{transform:rotateZ(0)} }
-@keyframes flip-z-ccw  { 0%{transform:rotateZ(0)}   50%{transform:rotateZ(-90deg);filter:blur(3px);opacity:.45} 100%{transform:rotateZ(0)} }
-@keyframes flip-z-half { 0%{transform:rotateZ(0)}   50%{transform:rotateZ(180deg);filter:blur(3px);opacity:.45} 100%{transform:rotateZ(0)} }
+/* ── In-plane rotation (the layer turns around the face centre) ── */
+@keyframes spin-cw   { from { transform: rotate(0); }    to { transform: rotate(90deg); } }
+@keyframes spin-ccw  { from { transform: rotate(0); }    to { transform: rotate(-90deg); } }
+@keyframes spin-half { from { transform: rotate(0); }    to { transform: rotate(180deg); } }
 
-.anim-x-cw  { animation: flip-x-cw   0.42s cubic-bezier(0.4,0,0.2,1) !important; }
-.anim-x-ccw { animation: flip-x-ccw  0.42s cubic-bezier(0.4,0,0.2,1) !important; }
-.anim-x-half{ animation: flip-x-half 0.42s cubic-bezier(0.4,0,0.2,1) !important; }
-.anim-y-cw  { animation: flip-y-cw   0.42s cubic-bezier(0.4,0,0.2,1) !important; }
-.anim-y-ccw { animation: flip-y-ccw  0.42s cubic-bezier(0.4,0,0.2,1) !important; }
-.anim-y-half{ animation: flip-y-half 0.42s cubic-bezier(0.4,0,0.2,1) !important; }
-.anim-z-cw  { animation: flip-z-cw   0.42s cubic-bezier(0.4,0,0.2,1) !important; }
-.anim-z-ccw { animation: flip-z-ccw  0.42s cubic-bezier(0.4,0,0.2,1) !important; }
-.anim-z-half{ animation: flip-z-half 0.42s cubic-bezier(0.4,0,0.2,1) !important; }
+.spin-cw   { animation: spin-cw   0.42s cubic-bezier(0.45, 0, 0.25, 1) !important; }
+.spin-ccw  { animation: spin-ccw  0.42s cubic-bezier(0.45, 0, 0.25, 1) !important; }
+.spin-half { animation: spin-half 0.52s cubic-bezier(0.45, 0, 0.25, 1) !important; }
 
 /* ── Ячейки ── */
 .cell-wrap { position: relative; }

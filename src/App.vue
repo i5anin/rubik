@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import Cube from 'cubejs'
+import Cube from './lib/cubejs'
 import type { FaceLetter } from './types/cube'
 import { FACE_ORDER, FACE_BG, FACE_TEXT, FACE_SUBLABEL } from './types/cube'
 import { t } from './i18n'
+import { GITHUB_URL } from './config'
 import FaceGrid from './components/FaceGrid.vue'
 import SolutionPanel from './components/SolutionPanel.vue'
 import SavedConfigs from './components/SavedConfigs.vue'
@@ -129,14 +130,11 @@ async function handleImport(file: File) {
     <!-- Header -->
     <header>
       <div class="header-top">
-        <div class="header-left" />
-        <div class="header-center">
+        <a class="brand" :href="GITHUB_URL" target="_blank" rel="noopener">
           <img src="/favicon.svg" width="34" height="34" alt="cube" />
           <h1>{{ t('app.title') }}</h1>
-        </div>
-        <div class="header-right">
-          <HeaderLinks />
-        </div>
+        </a>
+        <HeaderLinks />
       </div>
       <p class="hint" v-html="t('app.hint')" />
     </header>
@@ -262,30 +260,24 @@ async function handleImport(file: File) {
   gap: 28px;
 }
 
-header { text-align: center; }
-
-/* 3-колоночный грид: [пустой | центр | ссылки] */
+/* Header: brand left, links right — no empty balancer column. */
 .header-top {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  width: 100%;
-  gap: 8px;
-}
-
-.header-left { /* пустой балансирующий блок */ }
-
-.header-center {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
   gap: 10px;
+  text-decoration: none;
+  transition: opacity 0.15s;
 }
-
-.header-right {
-  display: flex;
-  justify-content: flex-end;
-}
+.brand:hover { opacity: 0.8; }
+.brand img { display: block; }
 
 h1 {
   font-size: 26px;

@@ -12,7 +12,7 @@
  */
 
 import { ref, computed } from 'vue'
-import Cube from 'cubejs'
+import Cube from '../lib/cubejs'
 import { FACE_ORDER } from '../types/cube'
 
 // ── Solver initialisation ─────────────────────────────────────────────────

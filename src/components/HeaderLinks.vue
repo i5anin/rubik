@@ -16,9 +16,13 @@ async function copyAddr() {
 <template>
   <div class="links">
 
-    <!-- Переключатель языка -->
+    <!-- Переключатель языка (SVG-глобус — флаги-эмодзи не рендерятся в Windows) -->
     <button class="lang-btn" :title="lang === 'ru' ? 'Switch to English' : 'Переключить на русский'" @click="toggleLang">
-      <span class="lang-flag">{{ lang === 'ru' ? '🇷🇺' : '🇺🇸' }}</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M2 12h20" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+      </svg>
       <span class="lang-code">{{ lang === 'ru' ? 'RU' : 'EN' }}</span>
     </button>
 
@@ -67,7 +71,7 @@ async function copyAddr() {
   cursor:pointer; transition:color .15s,border-color .15s,background .15s;
 }
 .lang-btn:hover { color:#fff; border-color:#555; background:#252525; }
-.lang-flag { font-size:14px; line-height:1; }
+.lang-btn svg { display:block; }
 .lang-code { font-size:11px; letter-spacing:.05em; }
 
 /* Общая кнопка-иконка */

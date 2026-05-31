@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./docs/banner.svg" alt="Решатель кубика Рубика" width="100%" />
+<img src="./docs/cover.svg" alt="Решатель кубика Рубика" width="100%" />
 
 # 🧩 Решатель кубика Рубика
 

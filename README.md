@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./docs/banner.svg" alt="Rubik's Cube Solver" width="100%" />
+<img src="./docs/cover.svg" alt="Rubik's Cube Solver" width="100%" />
 
 # 🧩 Rubik's Cube Solver
 

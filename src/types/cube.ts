@@ -1,31 +1,48 @@
-export type FaceLetter = 'U' | 'R' | 'F' | 'D' | 'L' | 'B'
+/**
+ * Core cube domain types.
+ * Single source of truth: FaceLetter is *derived* from FACE_ORDER — the
+ * two can never drift apart.
+ */
 
-/** Порядок граней для kociemba */
-export const FACE_ORDER: FaceLetter[] = ['U', 'R', 'F', 'D', 'L', 'B']
+/** Immutable face-order array — Kociemba URFDLB encoding. */
+export const FACE_ORDER = ['U', 'R', 'F', 'D', 'L', 'B'] as const
 
-/** Hex-цвет каждой грани */
-export const FACE_BG: Record<FaceLetter, string> = {
-  U: '#f0f0f0', // Белый
-  R: '#e63946', // Красный
-  F: '#2dc653', // Зелёный
-  D: '#ffd60a', // Жёлтый
-  L: '#f77f00', // Оранжевый
-  B: '#4895ef', // Синий
-}
+/** Union type derived from the array above. */
+export type FaceLetter = (typeof FACE_ORDER)[number]
 
-/** Цвет текста поверх плашки */
-export const FACE_TEXT: Record<FaceLetter, string> = {
-  U: '#111', R: '#fff', F: '#fff', D: '#111', L: '#fff', B: '#fff',
-}
+/**
+ * Background hex colours for each face sticker.
+ * `satisfies` preserves string literals (for IDE autocomplete) while
+ * enforcing the `#${string}` constraint at compile-time.
+ */
+export const FACE_BG = {
+  U: '#f0f0f0',
+  R: '#e63946',
+  F: '#2dc653',
+  D: '#ffd60a',
+  L: '#f77f00',
+  B: '#4895ef',
+} as const satisfies Record<FaceLetter, `#${string}`>
 
-/** Русское название */
-export const FACE_LABEL: Record<FaceLetter, string> = {
-  U: 'Верх', R: 'Право', F: 'Перед', D: 'Низ', L: 'Лево', B: 'Зад',
-}
+/** Foreground text colour overlaid on each face background. */
+export const FACE_TEXT = {
+  U: '#111111',
+  R: '#ffffff',
+  F: '#ffffff',
+  D: '#111111',
+  L: '#ffffff',
+  B: '#ffffff',
+} as const satisfies Record<FaceLetter, `#${string}`>
 
-/** Английское/цвет подпись */
-export const FACE_SUBLABEL: Record<FaceLetter, string> = {
-  U: 'White', R: 'Red', F: 'Green', D: 'Yellow', L: 'Orange', B: 'Blue',
-}
+/** English colour name displayed below each face grid. */
+export const FACE_SUBLABEL = {
+  U: 'White',
+  R: 'Red',
+  F: 'Green',
+  D: 'Yellow',
+  L: 'Orange',
+  B: 'Blue',
+} as const satisfies Record<FaceLetter, string>
 
-export const CENTER_IDX = 4
+/** Zero-based index of the centre sticker within a nine-element face array. */
+export const CENTER_IDX = 4 as const

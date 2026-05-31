@@ -206,8 +206,8 @@ async function handleImport(file: File) {
 
       <ValidationChip
         :ok="validation.ok"
-        :error-face="validation.errorFace"
-        :error-count="validation.errorCount"
+        :error-face="validation.ok ? undefined : validation.errorFace"
+        :error-count="validation.ok ? undefined : validation.errorCount"
         :color-counts="colorCounts"
       />
 

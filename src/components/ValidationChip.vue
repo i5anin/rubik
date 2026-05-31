@@ -16,7 +16,7 @@ const show = ref(false)
 const chipMsg = computed(() => {
   if (props.ok) { return t('valid.ok') }
   if (props.errorFace !== undefined && props.errorCount !== undefined) {
-    return `${t('color.' + props.errorFace)}: ${props.errorCount}/9`
+    return `${t(`color.${props.errorFace}`)}: ${props.errorCount}/9`
   }
   return t('valid.ok')
 })

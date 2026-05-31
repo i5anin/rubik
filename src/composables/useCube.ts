@@ -1,69 +1,94 @@
+/**
+ * Reactive Rubik's Cube state manager.
+ *
+ * The cube state is a flat Record<FaceLetter, FaceLetter[]> where each value
+ * is a nine-element array of sticker colours, read left-to-right top-to-bottom.
+ * The centre sticker (index 4) is immutable — its colour defines the face.
+ */
+
 import { reactive, computed } from 'vue'
 import type { FaceLetter } from '../types/cube'
-import { FACE_ORDER } from '../types/cube'
+import { FACE_ORDER, CENTER_IDX } from '../types/cube'
 
-/** Начальное состояние — решённый куб (каждая грань одного цвета) */
+// ── Helpers ───────────────────────────────────────────────────────────────
+
+/** Returns a fully-solved cube (each face is a uniform nine-sticker array). */
 function makeSolvedFaces(): Record<FaceLetter, FaceLetter[]> {
-  const faces = {} as Record<FaceLetter, FaceLetter[]>
-  for (const face of FACE_ORDER) {
-    faces[face] = Array(9).fill(face) as FaceLetter[]
-  }
-  return faces
+  return Object.fromEntries(
+    FACE_ORDER.map(face => [face, Array<FaceLetter>(9).fill(face)]),
+  ) as Record<FaceLetter, FaceLetter[]>
 }
+
+/** Count occurrences of a character in a string — O(n), allocation-free. */
+function countChar(str: string, char: string): number {
+  let n = 0
+  for (const c of str) { if (c === char) { n++ } }
+  return n
+}
+
+// ── Composable ────────────────────────────────────────────────────────────
 
 export function useCube() {
   const faces = reactive<Record<FaceLetter, FaceLetter[]>>(makeSolvedFaces())
 
-  /** Покрасить клетку (центр [4] — заблокирован) */
-  function setCell(face: FaceLetter, idx: number, color: FaceLetter) {
-    if (idx === 4) {return}
-    faces[face][idx] = color
+  /** Paint a sticker.  The centre (index 4) is locked and silently ignored. */
+  function setCell(face: FaceLetter, idx: number, colour: FaceLetter): void {
+    if (idx === CENTER_IDX) { return }
+    faces[face][idx] = colour
   }
 
-  /** Вернуть грань к цвету по умолчанию */
-  function resetFace(face: FaceLetter) {
-    faces[face] = Array(9).fill(face) as FaceLetter[]
+  /** Reset a single face to its solved (uniform) colour. */
+  function resetFace(face: FaceLetter): void {
+    faces[face] = Array<FaceLetter>(9).fill(face)
   }
 
-  /** Сбросить весь куб */
-  function resetAll() {
-    const fresh = makeSolvedFaces()
-    for (const face of FACE_ORDER) {
-      faces[face].splice(0, 9, ...fresh[face])
-    }
+  /** Reset all six faces to the solved state. */
+  function resetAll(): void {
+    FACE_ORDER.forEach(face => { faces[face].splice(0, 9, ...Array<FaceLetter>(9).fill(face)) })
   }
 
-  /** 54-символьная строка в порядке URFDLB для kociemba */
+  /** Encode the current state as a 54-character URFDLB Kociemba string. */
   function toKociemba(): string {
     return FACE_ORDER.map(f => faces[f].join('')).join('')
   }
 
-  /** Валидация состояния */
-  const validation = computed<{ ok: boolean; errorFace?: FaceLetter; errorCount?: number }>(() => {
+  /**
+   * Decode a 54-character Kociemba string back into reactive face arrays.
+   * Used when loading a saved configuration or applying a move.
+   */
+  function fromKociemba(kStr: string): void {
+    FACE_ORDER.forEach((face, i) => {
+      const chunk = Array.from(kStr.slice(i * 9, i * 9 + 9)) as FaceLetter[]
+      faces[face].splice(0, 9, ...chunk)
+    })
+  }
+
+  /**
+   * Structural validation.
+   * Returns ok:true when every colour appears exactly nine times.
+   * Parity (orientation/permutation) is verified later by the solver itself.
+   */
+  const validation = computed<{
+    readonly ok:         true
+  } | {
+    readonly ok:         false
+    readonly errorFace:  FaceLetter
+    readonly errorCount: number
+  }>(() => {
     const s = toKociemba()
     for (const face of FACE_ORDER) {
-      const count = Array.from(s).filter(c => c === face).length
-      if (count !== 9) {return { ok: false, errorFace: face, errorCount: count }}
+      const count = countChar(s, face)
+      if (count !== 9) { return { ok: false, errorFace: face, errorCount: count } }
     }
     return { ok: true }
   })
 
-  /** Загрузить состояние из 54-символьной kociemba-строки (U/R/F/D/L/B) */
-  function fromKociemba(kStr: string) {
-    for (let i = 0; i < 6; i++) {
-      const face = FACE_ORDER[i]
-      faces[face].splice(0, 9, ...(kStr.slice(i * 9, i * 9 + 9).split('') as FaceLetter[]))
-    }
-  }
-
-  /** Сколько раз встречается каждый цвет */
-  const colorCounts = computed(() => {
+  /** Sticker count per colour — used by the ValidationChip bar chart. */
+  const colorCounts = computed<Record<FaceLetter, number>>(() => {
     const s = toKociemba()
-    const res = {} as Record<FaceLetter, number>
-    for (const face of FACE_ORDER) {
-      res[face] = Array.from(s).filter(c => c === face).length
-    }
-    return res
+    return Object.fromEntries(
+      FACE_ORDER.map(face => [face, countChar(s, face)]),
+    ) as Record<FaceLetter, number>
   })
 
   return { faces, setCell, resetFace, resetAll, toKociemba, fromKociemba, validation, colorCounts }

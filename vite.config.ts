@@ -1,30 +1,26 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
+/**
+ * Pinned to the Vite 7 (Rollup) line.
+ *
+ * Vite 8 publishes as `latest` but ships the new Rolldown bundler, which —
+ * as of 8.0.14 — inlines its own dev/HMR client runtime (`env.mjs`, the
+ * `__BUNDLED_DEV__` / `__SERVER_FORWARD_CONSOLE__` / `__HMR_*__` globals) into
+ * the production bundle, crashing the deployed app with ReferenceError /
+ * SyntaxError.  Hand-defining those private symbols is whack-a-mole — each
+ * one patched reveals the next.  Vite 7 emits a clean, self-contained
+ * production build with zero dev-runtime leakage, so the entire `define`
+ * workaround is deleted rather than extended.
+ */
 export default defineConfig({
   plugins: [vue()],
 
-  // Vite 8 (Rolldown): внутренние переменные HMR-клиента не заменяются
-  // в production-бандле — определяем вручную
-  define: {
-    __BUNDLED_DEV__: false,
-    __SERVER_FORWARD_CONSOLE__: false,
-    __HMR_CONFIG_NAME__: JSON.stringify(''),
-    __HMR_PROTOCOL__: JSON.stringify(''),
-    __HMR_HOSTNAME__: JSON.stringify(''),
-    __HMR_PORT__: JSON.stringify(''),
-    __HMR_DIRECT_TARGET__: JSON.stringify(''),
-    __HMR_BASE__: JSON.stringify('/'),
-    __HMR_TIMEOUT__: 30000,
-    __HMR_ENABLE_OVERLAY__: false,
-    __SERVER_HOST__: JSON.stringify(''),
-  },
-
-  // cubejs — CJS-пакет, принудительно пре-бандлим
+  // cubejs is a UMD/CommonJS package — pre-bundle it so its `module.exports`
+  // is interop-wrapped into a proper ESM default export.
   optimizeDeps: {
     include: ['cubejs'],
   },
-
   build: {
     commonjsOptions: {
       include: [/cubejs/, /node_modules/],

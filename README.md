@@ -15,6 +15,8 @@
 
 [**Live Demo**](https://github.com/i5anin/rubik) · [Report Bug](https://github.com/i5anin/rubik/issues) · [Request Feature](https://github.com/i5anin/rubik/issues)
 
+**English** · [Русский](./README.ru.md)
+
 </div>
 
 ---

@@ -110,7 +110,7 @@ function cellStyle(sticker: FaceLetter, idx: number) {
 /* ── Обёртка ── */
 .face-wrap {
   display: flex; flex-direction: column; align-items: center; gap: 5px;
-  perspective: 400px; transition: transform 0.2s;
+  transition: transform 0.2s;
 }
 .face-active { transform: scale(1.07); }
 
@@ -127,7 +127,7 @@ function cellStyle(sticker: FaceLetter, idx: number) {
   grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(3, 42px);
   gap: 3px; padding: 5px; background: #1c1c1c; border-radius: 8px;
   border: 1px solid #2a2a2a; transition: border-color 0.2s, box-shadow 0.2s;
-  transform-style: preserve-3d; will-change: transform;
+  will-change: transform;
 }
 
 /* ── Оверлей ── */

@@ -26,7 +26,7 @@
     <rect x="84" y="500" width="118" height="34" rx="17" fill="#1a1a1a" stroke="#2a2a2a"/>
     <text x="143" y="523" fill="#9aa0a6" text-anchor="middle">RU / EN</text>
     <rect x="212" y="500" width="150" height="34" rx="17" fill="#1a1a1a" stroke="#2a2a2a"/>
-    <text x="287" y="523" fill="#9aa0a6" text-anchor="middle">3D animation</text>
+    <text x="287" y="523" fill="#9aa0a6" text-anchor="middle">step-by-step</text>
     <rect x="372" y="500" width="150" height="34" rx="17" fill="#1a1a1a" stroke="#2a2a2a"/>
     <text x="447" y="523" fill="#9aa0a6" text-anchor="middle">localStorage</text>
   </g>

@@ -50,26 +50,56 @@ function solved(): Cubelet[] {
   return list
 }
 
-// Cycle four sticker directions: new[a] = old[d], new[b] = old[a], … (a←b←c←d←a)
-function cycleColors(c: Cubelet['colors'], order: [Dir, Dir, Dir, Dir]): void {
-  const [a, b, cc, d] = order
-  const last = c[d]
-  c[d] = c[cc]; c[cc] = c[b]; c[b] = c[a]; c[a] = last
+type Vec = readonly [number, number, number]
+
+const DIRS: Dir[] = ['U', 'D', 'L', 'R', 'F', 'B']
+const DIR_VEC: Record<Dir, Vec> = {
+  U: [0, 1, 0], D: [0, -1, 0],
+  R: [1, 0, 0], L: [-1, 0, 0],
+  F: [0, 0, 1], B: [0, 0, -1],
+}
+
+function vecToDir([x, y, z]: Vec): Dir {
+  for (const d of DIRS) {
+    const v = DIR_VEC[d]
+    if (v[0] === x && v[1] === y && v[2] === z) { return d }
+  }
+  return 'U' // unreachable for unit axis vectors
+}
+
+/**
+ * Clockwise 90° rotation of a vector around the given face's axis.
+ * The SAME rotation is applied to a cubelet's position and to each of its
+ * sticker directions, so position and colours can never drift apart — which
+ * is what previously left some outer faces blank.
+ */
+function rotateVec(face: FaceLetter, [x, y, z]: Vec): Vec {
+  switch (face) {
+    case 'U': return [-z, y, x]
+    case 'D': return [z, y, -x]
+    case 'R': return [x, z, -y]
+    case 'L': return [x, -z, y]
+    case 'F': return [y, -x, z]
+    case 'B': return [-y, x, z]
+  }
 }
 
 /** One clockwise quarter-turn of a face, applied to the model. */
 function turnCW(cubelets: Cubelet[], face: FaceLetter): void {
   for (const cl of cubelets) {
-    let inLayer = false
-    switch (face) {
-      case 'U': if (cl.y === 1)  { inLayer = true; [cl.x, cl.z] = [-cl.z, cl.x];  cycleColors(cl.colors, ['F', 'L', 'B', 'R']) } break
-      case 'D': if (cl.y === -1) { inLayer = true; [cl.x, cl.z] = [cl.z, -cl.x];  cycleColors(cl.colors, ['F', 'R', 'B', 'L']) } break
-      case 'R': if (cl.x === 1)  { inLayer = true; [cl.y, cl.z] = [cl.z, -cl.y];  cycleColors(cl.colors, ['U', 'F', 'D', 'B']) } break
-      case 'L': if (cl.x === -1) { inLayer = true; [cl.y, cl.z] = [-cl.z, cl.y];  cycleColors(cl.colors, ['U', 'B', 'D', 'F']) } break
-      case 'F': if (cl.z === 1)  { inLayer = true; [cl.x, cl.y] = [cl.y, -cl.x];  cycleColors(cl.colors, ['U', 'L', 'D', 'R']) } break
-      case 'B': if (cl.z === -1) { inLayer = true; [cl.x, cl.y] = [-cl.y, cl.x];  cycleColors(cl.colors, ['U', 'R', 'D', 'L']) } break
+    if (!inLayer(cl, face)) { continue }
+
+    // rotate position
+    const [nx, ny, nz] = rotateVec(face, [cl.x, cl.y, cl.z])
+    cl.x = nx; cl.y = ny; cl.z = nz
+
+    // rotate sticker directions by the same matrix
+    const old = { ...cl.colors }
+    const next: Cubelet['colors'] = { U: null, D: null, L: null, R: null, F: null, B: null }
+    for (const d of DIRS) {
+      next[vecToDir(rotateVec(face, DIR_VEC[d]))] = old[d]
     }
-    void inLayer
+    cl.colors = next
   }
 }
 

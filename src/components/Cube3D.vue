@@ -122,7 +122,12 @@ function cubeletTransform(cl: Cubelet): string {
             class="face"
             :style="{ transform: `${f.t} translateZ(22px)` }"
           >
-            <div v-if="cl.colors[f.dir]" class="sticker" :style="{ background: cl.colors[f.dir] as string }" />
+            <div
+              v-if="cl.colors[f.dir]"
+              class="sticker"
+              :class="`lit-${f.dir}`"
+              :style="{ background: cl.colors[f.dir] as string }"
+            />
           </div>
         </div>
       </div>
@@ -165,18 +170,27 @@ function cubeletTransform(cl: Cubelet): string {
 .face {
   position: absolute;
   inset: 0;
-  background: #141414;          /* black plastic body */
+  background: #101010;          /* black plastic body */
   border-radius: 7px;
   display: grid;
   place-items: center;
-  backface-visibility: hidden;
+  /* NB: no backface-visibility:hidden — it makes faces flicker/vanish during
+     the layer rotation under preserve-3d in Chromium. */
 }
 .sticker {
-  width: 84%;
-  height: 84%;
+  width: 90%;
+  height: 90%;
   border-radius: 5px;
-  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.4), inset 0 2px 2px rgba(255, 255, 255, 0.18);
 }
+
+/* Fake directional lighting for depth — top brightest, bottom darkest. */
+.lit-U { filter: brightness(1.1); }
+.lit-D { filter: brightness(0.74); }
+.lit-F { filter: brightness(1.0); }
+.lit-B { filter: brightness(0.82); }
+.lit-R { filter: brightness(0.9); }
+.lit-L { filter: brightness(0.86); }
 
 .hint-3d {
   font-size: 11px;

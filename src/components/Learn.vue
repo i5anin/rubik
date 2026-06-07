@@ -40,7 +40,8 @@ let timer: ReturnType<typeof setTimeout> | undefined
 
 function play(algoIdx: number, moves: string[]): void {
   if (timer) { clearTimeout(timer) }
-  // run the sequence on the 3D cube…
+  // start from a solved cube so the trigger is easy to follow…
+  cube3d.value?.resetCube()
   void cube3d.value?.playSequence(moves)
   // …and light up each badge in step (matched to the cube's pace)
   let step = 0

@@ -132,19 +132,22 @@ function cubeletTransform(cl: Cubelet): string {
           :class="{ turning: !noTransition && animFace && inLayer(cl, animFace) }"
           :style="{ transform: cubeletTransform(cl) }"
         >
-          <div
-            v-for="f in FACES"
-            :key="f.dir"
-            class="face"
-            :style="{ transform: `${f.t} translateZ(22px)` }"
-          >
+          <!-- Only the outer (coloured) faces are drawn — no inner faces to
+               overlap and no backface to vanish mid-turn. The black core
+               behind them hides the interior. -->
+          <template v-for="f in FACES" :key="f.dir">
             <div
               v-if="cl.colors[f.dir]"
-              class="sticker"
-              :class="`lit-${f.dir}`"
-              :style="{ background: cl.colors[f.dir] as string }"
-            />
-          </div>
+              class="face"
+              :style="{ transform: `${f.t} translateZ(22px)` }"
+            >
+              <div
+                class="sticker"
+                :class="`lit-${f.dir}`"
+                :style="{ background: cl.colors[f.dir] as string }"
+              />
+            </div>
+          </template>
         </div>
       </div>
     </div>
@@ -206,14 +209,13 @@ function cubeletTransform(cl: Cubelet): string {
 .face {
   position: absolute;
   inset: 0;
-  background: #101010;          /* black plastic body */
+  background: #101010;          /* black plastic body around the sticker */
   border-radius: 7px;
   display: grid;
   place-items: center;
-  /* Hide the inner/back faces so they can't overlap the coloured outer faces
-     by z-order during a layer rotation. (Earlier "vanishing" was the model
-     bug, now fixed — backface-visibility is the correct tool here.) */
-  backface-visibility: hidden;
+  /* No backface-visibility:hidden — only outer faces are rendered, so they
+     must stay visible at every rotation angle (otherwise they'd blink out
+     mid-turn). The core behind them prevents see-through. */
 }
 .sticker {
   width: 90%;

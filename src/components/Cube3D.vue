@@ -39,6 +39,7 @@ function onUp(): void { dragging = false }
 const animFace = ref<FaceLetter | null>(null)
 const animAngle = ref(0)
 const animating = ref(false)
+const noTransition = ref(false) // freeze transition during the atomic commit
 let timer: ReturnType<typeof setTimeout> | undefined
 
 const SPEED = 420 // ms per quarter turn
@@ -51,23 +52,33 @@ function playMove(move: string): Promise<void> {
     const sign = mod === "'" ? -1 : 1
 
     animating.value = true
+    noTransition.value = false
     animFace.value = face
     animAngle.value = 0
 
-    // next frame → animate to the target angle
+    // next frame → animate the layer to the target angle
     requestAnimationFrame(() => {
       requestAnimationFrame(() => { animAngle.value = 90 * quarters * sign })
     })
 
+    // Commit exactly when the rotation finishes. With transition off, the new
+    // base transform equals the just-rotated visual, so there is NO visible
+    // colour/position jump — the turn flows straight into the next state.
     timer = setTimeout(() => {
-      // commit to the model, then drop the visual rotation with no transition
+      noTransition.value = true
       const m = mod === '2' ? `${face}2` : mod === "'" ? `${face}'` : face
       applyMove(m)
       animFace.value = null
       animAngle.value = 0
-      animating.value = false
-      resolve()
-    }, SPEED * quarters + 60)
+      // restore transition on a later frame, once the new state has painted
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          noTransition.value = false
+          animating.value = false
+          resolve()
+        })
+      })
+    }, SPEED * quarters)
   })
 }
 
@@ -81,7 +92,7 @@ async function playSequence(moves: string[]): Promise<void> {
 
 function resetCube(): void {
   if (timer) { clearTimeout(timer) }
-  animFace.value = null; animAngle.value = 0; animating.value = false
+  animFace.value = null; animAngle.value = 0; animating.value = false; noTransition.value = false
   reset()
 }
 
@@ -113,7 +124,7 @@ function cubeletTransform(cl: Cubelet): string {
           v-for="cl in cubelets"
           :key="cl.id"
           class="cubelet"
-          :class="{ turning: animFace && inLayer(cl, animFace) }"
+          :class="{ turning: !noTransition && animFace && inLayer(cl, animFace) }"
           :style="{ transform: cubeletTransform(cl) }"
         >
           <div

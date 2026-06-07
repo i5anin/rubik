@@ -132,22 +132,24 @@ function cubeletTransform(cl: Cubelet): string {
           :class="{ turning: !noTransition && animFace && inLayer(cl, animFace) }"
           :style="{ transform: cubeletTransform(cl) }"
         >
-          <!-- Only the outer (coloured) faces are drawn — no inner faces to
-               overlap and no backface to vanish mid-turn. The black core
-               behind them hides the interior. -->
-          <template v-for="f in FACES" :key="f.dir">
+          <!-- All six faces are drawn so each cubelet is a solid black block:
+               its sides show as black plastic when a layer opens during a
+               turn (instead of a hole). Stickers sit on the outer faces. No
+               backface-visibility:hidden — faces must stay visible at any
+               rotation angle. -->
+          <div
+            v-for="f in FACES"
+            :key="f.dir"
+            class="face"
+            :style="{ transform: `${f.t} translateZ(22px)` }"
+          >
             <div
               v-if="cl.colors[f.dir]"
-              class="face"
-              :style="{ transform: `${f.t} translateZ(22px)` }"
-            >
-              <div
-                class="sticker"
-                :class="`lit-${f.dir}`"
-                :style="{ background: cl.colors[f.dir] as string }"
-              />
-            </div>
-          </template>
+              class="sticker"
+              :class="`lit-${f.dir}`"
+              :style="{ background: cl.colors[f.dir] as string }"
+            />
+          </div>
         </div>
       </div>
     </div>

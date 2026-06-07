@@ -53,6 +53,7 @@ type MetaKey = `meta.${'title' | 'description'}`
 
 export type TranslationKey =
   | 'app.title' | 'app.hint' | 'palette.label' | 'step.done'
+  | 'tab.solver' | 'tab.learn'
   | FaceKey | ColorKey | SubKey
   | MoveLookKey | MoveActionKey
   | BtnKey | ValidKey | SolutionKey | SavedKey | AlgoKey | HeaderKey | MetaKey
@@ -69,6 +70,8 @@ const dict: Record<TranslationKey, DictEntry> = {
     en: 'Hold the cube <b>white face up</b> and <b>green face toward you</b>. Click the stickers to paint them. Hover over a sticker to see its colour.',
   },
   'palette.label': { ru: 'Цвет кисти:',  en: 'Paint colour:' },
+  'tab.solver':    { ru: 'Решатель',     en: 'Solver' },
+  'tab.learn':     { ru: 'Обучение',     en: 'Learn' },
   'step.done':     { ru: 'Готово',       en: 'Done' },
 
   // Faces

@@ -11,6 +11,7 @@ import SavedConfigs from './components/SavedConfigs.vue'
 import HeaderLinks from './components/HeaderLinks.vue'
 import ValidationChip from './components/ValidationChip.vue'
 import Icon from './components/Icon.vue'
+import Learn from './components/Learn.vue'
 import { useCube } from './composables/useCube'
 import { useSolver } from './composables/useSolver'
 import { useSavedConfigs } from './composables/useSavedConfigs'
@@ -22,6 +23,7 @@ const { faces, setCell, resetAll, toKociemba, fromKociemba, validation, colorCou
 const { solve, solving, rawSolution, solveError, steps, clear } = useSolver()
 const { configs, save, remove, rename, exportJson, importJson } = useSavedConfigs()
 
+const mode = ref<'solver' | 'learn'>('solver')
 const activePaint = ref<FaceLetter>('R')
 const saveMsg = ref('')
 
@@ -142,9 +144,24 @@ async function handleImport(file: File) {
       </div>
       <!-- app.hint is a static i18n string with <b> tags, never user input -->
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <p class="hint" v-html="t('app.hint')" />
+      <p v-if="mode === 'solver'" class="hint" v-html="t('app.hint')" />
     </header>
 
+    <!-- Mode tabs -->
+    <nav class="tabs">
+      <button class="tab" :class="{ active: mode === 'solver' }" @click="mode = 'solver'">
+        <Icon name="solve" /> {{ t('tab.solver') }}
+      </button>
+      <button class="tab" :class="{ active: mode === 'learn' }" @click="mode = 'learn'">
+        <Icon name="info" /> {{ t('tab.learn') }}
+      </button>
+    </nav>
+
+    <!-- ══ LEARN MODE ══ -->
+    <Learn v-if="mode === 'learn'" />
+
+    <!-- ══ SOLVER MODE ══ -->
+    <template v-else>
     <!-- Палитра цветов -->
     <section class="palette-row">
       <span class="palette-label">{{ t('palette.label') }}</span>
@@ -256,6 +273,7 @@ async function handleImport(file: File) {
       @export="exportJson"
       @import="handleImport"
     />
+    </template>
 
   </div>
 </template>
@@ -302,6 +320,35 @@ h1 {
 
 .hint { color: #555; font-size: 13px; margin-top: 8px; }
 .hint strong { color: #888; }
+
+/* Mode tabs */
+.tabs {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  background: #161616;
+  border: 1px solid #2a2a2a;
+  border-radius: 11px;
+  padding: 5px;
+  width: fit-content;
+  margin: 0 auto;
+}
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #888;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.tab:hover { color: #ccc; }
+.tab.active { background: #4895ef; color: #fff; }
 
 /* ── Палитра ── */
 .palette-row {

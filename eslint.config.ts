@@ -64,8 +64,8 @@ const config: Linter.Config[] = [
 
       // --- Vue ---
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
-      // "Icon" is a conventional base-component name (like RouterView).
-      'vue/multi-word-component-names': ['error', { ignores: ['Icon'] }],
+      // "Icon"/"Learn" are conventional single-word component names.
+      'vue/multi-word-component-names': ['error', { ignores: ['Icon', 'Learn'] }],
       'vue/no-unused-vars': 'error',
       'vue/no-v-html': 'warn',
       'vue/define-macros-order': ['error', {

@@ -42,10 +42,11 @@ const animAngle = ref(0)
 const animating = ref(false)
 const noTransition = ref(false) // freeze transition during the atomic commit
 let timer: ReturnType<typeof setTimeout> | undefined
+let runId = 0 // bumped to cancel an in-flight sequence (e.g. on reset)
 
 const SPEED = 420 // ms per quarter turn
 
-function playMove(move: string): Promise<void> {
+function playMove(move: string, myRun: number): Promise<void> {
   return new Promise((resolve) => {
     const face = move[0] as FaceLetter
     const mod = move.slice(1)
@@ -57,21 +58,21 @@ function playMove(move: string): Promise<void> {
     animFace.value = face
     animAngle.value = 0
 
-    // next frame → animate the layer to the target angle
+    // next frame → animate the layer to the target angle (skip if cancelled)
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => { animAngle.value = 90 * quarters * sign })
+      requestAnimationFrame(() => { if (myRun === runId) { animAngle.value = 90 * quarters * sign } })
     })
 
     // Commit exactly when the rotation finishes. With transition off, the new
     // base transform equals the just-rotated visual, so there is NO visible
     // colour/position jump — the turn flows straight into the next state.
     timer = setTimeout(() => {
+      if (myRun !== runId) { resolve(); return } // cancelled by reset
       noTransition.value = true
       const m = mod === '2' ? `${face}2` : mod === "'" ? `${face}'` : face
       applyMove(m)
       animFace.value = null
       animAngle.value = 0
-      // restore transition on a later frame, once the new state has painted
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           noTransition.value = false
@@ -85,16 +86,27 @@ function playMove(move: string): Promise<void> {
 
 async function playSequence(moves: string[]): Promise<void> {
   if (animating.value) { return }
+  const myRun = ++runId
   for (const m of moves) {
-    await playMove(m)
+    if (myRun !== runId) { return } // a reset cancelled us
+    await playMove(m, myRun)
+    if (myRun !== runId) { return }
     await new Promise((r) => setTimeout(r, 110))
   }
 }
 
 function resetCube(): void {
+  runId++ // cancel any running sequence and its pending frames
   if (timer) { clearTimeout(timer) }
-  animFace.value = null; animAngle.value = 0; animating.value = false; noTransition.value = false
+  // freeze transitions so cubelets snap to solved instead of flying there
+  noTransition.value = true
+  animFace.value = null
+  animAngle.value = 0
+  animating.value = false
   reset()
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { noTransition.value = false })
+  })
 }
 
 onBeforeUnmount(() => { if (timer) { clearTimeout(timer) } })

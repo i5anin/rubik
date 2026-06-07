@@ -10,6 +10,7 @@
     "lint:fix": "eslint src --ext .ts,.vue --fix"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "cubejs": "^1.3.2",
     "vue": "^3.5.35"
   },

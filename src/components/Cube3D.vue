@@ -120,6 +120,10 @@ function cubeletTransform(cl: Cubelet): string {
       @pointerleave="onUp"
     >
       <div class="cube" :style="{ transform: `rotateX(${rx}deg) rotateY(${ry}deg)` }">
+        <!-- solid black core: fills the interior so gaps never show through -->
+        <div class="core">
+          <div v-for="f in FACES" :key="f.dir" class="core-face" :style="{ transform: `${f.t} translateZ(60px)` }" />
+        </div>
         <div
           v-for="cl in cubelets"
           :key="cl.id"
@@ -170,6 +174,19 @@ function cubeletTransform(cl: Cubelet): string {
   place-items: center;
 }
 
+/* Solid black interior block */
+.core {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  transform-style: preserve-3d;
+}
+.core-face {
+  position: absolute;
+  inset: 0;
+  background: #0a0a0a;
+}
+
 .cubelet {
   position: absolute;
   width: 44px;
@@ -185,8 +202,10 @@ function cubeletTransform(cl: Cubelet): string {
   border-radius: 7px;
   display: grid;
   place-items: center;
-  /* NB: no backface-visibility:hidden — it makes faces flicker/vanish during
-     the layer rotation under preserve-3d in Chromium. */
+  /* Hide the inner/back faces so they can't overlap the coloured outer faces
+     by z-order during a layer rotation. (Earlier "vanishing" was the model
+     bug, now fixed — backface-visibility is the correct tool here.) */
+  backface-visibility: hidden;
 }
 .sticker {
   width: 90%;

@@ -5,6 +5,11 @@ import { lang, describeMove } from '../i18n'
 import { FACE_BG, FACE_TEXT } from '../types/cube'
 import type { FaceLetter } from '../types/cube'
 import Icon from './Icon.vue'
+import Cube3D from './Cube3D.vue'
+
+// Exposed API of Cube3D (InstanceType can't see defineExpose cleanly).
+interface Cube3DApi { playSequence: (moves: string[]) => Promise<void>; resetCube: () => void }
+const cube3d = ref<Cube3DApi | null>(null)
 
 const current = ref(0)
 const lesson = computed(() => LESSONS[current.value])
@@ -35,12 +40,15 @@ let timer: ReturnType<typeof setTimeout> | undefined
 
 function play(algoIdx: number, moves: string[]): void {
   if (timer) { clearTimeout(timer) }
+  // run the sequence on the 3D cube…
+  void cube3d.value?.playSequence(moves)
+  // …and light up each badge in step (matched to the cube's pace)
   let step = 0
   const tick = (): void => {
     if (step >= moves.length) { playing.value = null; return }
     playing.value = { algo: algoIdx, step }
     step++
-    timer = setTimeout(tick, 650)
+    timer = setTimeout(tick, 530)
   }
   tick()
 }
@@ -93,13 +101,21 @@ function movesOf(s: string): string[] {
       <!-- eslint-disable-next-line vue/no-v-html -->
       <p v-for="(p, i) in lesson.body" :key="i" class="body" v-html="L(p)" />
 
+      <!-- 3D cube — algorithms play out on it -->
+      <div v-if="lesson.algorithms" class="cube-stage">
+        <Cube3D ref="cube3d" />
+        <button class="reset3d" @click="cube3d?.resetCube()">
+          <Icon name="reset" /> {{ lang === 'ru' ? 'Собрать заново' : 'Reset cube' }}
+        </button>
+      </div>
+
       <!-- Algorithms -->
       <div v-if="lesson.algorithms" class="algos">
         <div v-for="(algo, ai) in lesson.algorithms" :key="ai" class="algo">
           <div class="algo-top">
             <span v-if="algo.when" class="algo-when">{{ L(algo.when) }}</span>
             <button class="play-btn" @click="play(ai, movesOf(algo.moves))">
-              <Icon name="chevron" /> {{ lang === 'ru' ? 'Показать' : 'Play' }}
+              <Icon name="chevron" /> {{ lang === 'ru' ? 'Показать на кубике' : 'Play on cube' }}
             </button>
           </div>
           <div class="moves">
@@ -180,6 +196,19 @@ h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
 
 .body { font-size: 14px; line-height: 1.65; color: #c8c8c8; }
 .body :deep(b) { color: #fff; font-weight: 700; }
+
+/* 3D cube stage */
+.cube-stage {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 14px 0 4px;
+}
+.reset3d {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #222; border: 1px solid #333; border-radius: 8px; color: #aaa;
+  font-size: 12px; font-weight: 600; padding: 6px 14px; cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+.reset3d:hover { color: #ddd; border-color: #555; }
 
 /* Algorithms */
 .algos { display: flex; flex-direction: column; gap: 12px; }

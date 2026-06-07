@@ -13,7 +13,8 @@ const FACES: { dir: Dir; t: string }[] = [
   { dir: 'L', t: 'rotateY(-90deg)' },
 ]
 
-const { cubelets, reset, applyMove } = useCube3D()
+const { cubelets, reset, applyMove, net } = useCube3D()
+const NET_FACES: FaceLetter[] = ['U', 'L', 'F', 'R', 'B', 'D']
 
 // ── Orbit (drag to rotate the whole cube) ──────────────────────────────
 const rx = ref(-28)
@@ -148,6 +149,13 @@ function cubeletTransform(cl: Cubelet): string {
       </div>
     </div>
     <p class="hint-3d">{{ '↻ ' }}<span>покрути мышью</span></p>
+
+    <!-- 2D unfolded net, in sync with the 3D model -->
+    <div class="net2d">
+      <div v-for="f in NET_FACES" :key="f" class="net-face" :class="`area-${f}`">
+        <div v-for="(hex, i) in net[f]" :key="i" class="net-cell" :style="{ background: hex }" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -227,6 +235,35 @@ function cubeletTransform(cl: Cubelet): string {
   color: #555;
 }
 .hint-3d span { color: #777; }
+
+/* 2D unfolded net (cross layout), driven by the same model */
+.net2d {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-template-areas:
+    ".  U  .  ."
+    "L  F  R  B"
+    ".  D  .  .";
+  gap: 4px;
+  margin-top: 6px;
+}
+.area-U { grid-area: U; }
+.area-L { grid-area: L; }
+.area-F { grid-area: F; }
+.area-R { grid-area: R; }
+.area-B { grid-area: B; }
+.area-D { grid-area: D; }
+
+.net-face {
+  display: grid;
+  grid-template-columns: repeat(3, 13px);
+  grid-template-rows: repeat(3, 13px);
+  gap: 2px;
+  padding: 2px;
+  background: #1c1c1c;
+  border-radius: 4px;
+}
+.net-cell { border-radius: 2px; }
 
 @media (max-width: 480px) {
   .scene { width: 180px; height: 180px; }

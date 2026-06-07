@@ -9,8 +9,8 @@
  *
  * Axes:  x+ right, y+ up, z+ front.
  */
-import { ref } from 'vue'
-import { FACE_BG } from '../types/cube'
+import { ref, computed } from 'vue'
+import { FACE_BG, FACE_ORDER } from '../types/cube'
 import type { FaceLetter } from '../types/cube'
 
 export type Dir = 'U' | 'D' | 'L' | 'R' | 'F' | 'B'
@@ -103,12 +103,45 @@ function turnCW(cubelets: Cubelet[], face: FaceLetter): void {
   }
 }
 
+/**
+ * Cubelet [x,y,z] that owns sticker (row, col) of a face, as seen face-on in
+ * the unfolded net (row 0 = top, col 0 = left).
+ */
+function stickerCubelet(face: FaceLetter, row: number, col: number): [number, number, number] {
+  switch (face) {
+    case 'U': return [col - 1, 1, row - 1]
+    case 'D': return [col - 1, -1, 1 - row]
+    case 'F': return [col - 1, 1 - row, 1]
+    case 'B': return [1 - col, 1 - row, -1]
+    case 'R': return [1, 1 - row, 1 - col]
+    case 'L': return [-1, 1 - row, col - 1]
+  }
+}
+
 export function useCube3D() {
   const cubelets = ref<Cubelet[]>(solved())
 
   function reset(): void {
     cubelets.value = solved()
   }
+
+  /** 2D unfolded net derived from the cubelets — 9 hex colours per face. */
+  const net = computed<Record<FaceLetter, string[]>>(() => {
+    const at = (x: number, y: number, z: number): Cubelet | undefined =>
+      cubelets.value.find(c => c.x === x && c.y === y && c.z === z)
+    const result = {} as Record<FaceLetter, string[]>
+    for (const face of FACE_ORDER) {
+      const cells: string[] = []
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+          const [x, y, z] = stickerCubelet(face, row, col)
+          cells.push(at(x, y, z)?.colors[face] ?? '#0a0a0a')
+        }
+      }
+      result[face] = cells
+    }
+    return result
+  })
 
   /** Apply a move like "U", "R'", "F2" instantly to the model. */
   function applyMove(move: string): void {
@@ -119,7 +152,7 @@ export function useCube3D() {
     cubelets.value = [...cubelets.value] // trigger reactivity
   }
 
-  return { cubelets, reset, applyMove }
+  return { cubelets, reset, applyMove, net }
 }
 
 /** Which cubelets belong to a face's layer — used by the animation. */

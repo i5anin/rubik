@@ -118,11 +118,34 @@ function stickerCubelet(face: FaceLetter, row: number, col: number): [number, nu
   }
 }
 
+/** Build cubelets from a 54-char URFDLB facelet string (solver state). */
+function fromFacelet(s: string): Cubelet[] {
+  const list = solved() // correct positions; recolour outer faces below
+  const find = (x: number, y: number, z: number): Cubelet | undefined =>
+    list.find(c => c.x === x && c.y === y && c.z === z)
+  FACE_ORDER.forEach((face, fi) => {
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 3; col++) {
+        const letter = s.charAt(fi * 9 + row * 3 + col) as FaceLetter
+        const [x, y, z] = stickerCubelet(face, row, col)
+        const cl = find(x, y, z)
+        if (cl) { cl.colors[face] = FACE_BG[letter] }
+      }
+    }
+  })
+  return list
+}
+
 export function useCube3D() {
   const cubelets = ref<Cubelet[]>(solved())
 
   function reset(): void {
     cubelets.value = solved()
+  }
+
+  /** Replace the whole state from a solver facelet string. */
+  function setFacelet(s: string): void {
+    if (s.length === 54) { cubelets.value = fromFacelet(s) }
   }
 
   /** 2D unfolded net derived from the cubelets — 9 hex colours per face. */
@@ -152,7 +175,7 @@ export function useCube3D() {
     cubelets.value = [...cubelets.value] // trigger reactivity
   }
 
-  return { cubelets, reset, applyMove, net }
+  return { cubelets, reset, applyMove, net, setFacelet }
 }
 
 /** Which cubelets belong to a face's layer — used by the animation. */

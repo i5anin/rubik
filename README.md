@@ -26,6 +26,8 @@
 | | |
 |---|---|
 | 🎨 **Visual input** | Click stickers on an unfolded cross layout. Hover any sticker to read its colour. Centres are locked — they define each face. |
+| 🧊 **Interactive 3D cube** | A real CSS-3D cube (no three.js) you can drag to orbit — shown in the solver to preview your input, and in Learn to watch moves play out. Hand-rolled cubelet model; correctness proven (`(R U R' U')⁶` returns to solved). |
+| 🎓 **Learn mode** | A beginner Layer-by-Layer course (7 steps + notation). Each algorithm is walked **one move at a time** on the 3D cube, with the current move highlighted and explained in plain language. |
 | ✅ **Live validation** | Instant feedback on colour counts (9 of each). Hover the status chip for a per-colour bar chart. Parity is verified by the solver. |
 | ⚡ **Optimal solving** | [Kociemba's two-phase algorithm](https://kociemba.org/cube.htm) — every cube solved in **≤ 20 moves**, in well under a second. |
 | 🎞️ **Step-by-step playback** | Apply moves one at a time. The active face lights up and **spins in-plane** toward its target; stickers update mid-turn. Undo any step. |
@@ -84,15 +86,21 @@ src/
 ├─ types/cube.ts          # FaceLetter derived from FACE_ORDER — one source of truth
 ├─ i18n.ts                # type-safe translations (keys are a template-literal union)
 ├─ lib/cubejs.ts          # single, documented interop site for the solver
+├─ data/lessons.ts        # the Layer-by-Layer course (bilingual, with algorithms)
 ├─ composables/
 │  ├─ useCube.ts          # reactive cube state + discriminated-union validation
+│  ├─ useCube3D.ts        # cubelet model: layer turns, facelet ⇄ net derivation
 │  ├─ useSolver.ts        # Kociemba wrapper, reactive solve steps
 │  └─ useSavedConfigs.ts  # localStorage persistence + JSON export/import
+├─ directives/tooltip.ts  # styled tooltip directive (replaces native title)
 └─ components/
    ├─ FaceGrid.vue        # one face: painting, hover tooltips, spin animation
+   ├─ Cube3D.vue          # interactive CSS-3D cube (orbit, layer animation, net)
+   ├─ Learn.vue           # lesson stepper + step-by-step algorithm walk-through
    ├─ SolutionPanel.vue   # step list, progress, per-step apply/undo
    ├─ ValidationChip.vue  # status chip + per-colour bar chart on hover
    ├─ SavedConfigs.vue    # saved states list
+   ├─ Icon.vue            # inline SVG icon set
    └─ HeaderLinks.vue     # language toggle, links, algorithm info
 ```
 

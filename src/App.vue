@@ -12,6 +12,7 @@ import HeaderLinks from './components/HeaderLinks.vue'
 import ValidationChip from './components/ValidationChip.vue'
 import Icon from './components/Icon.vue'
 import Learn from './components/Learn.vue'
+import Cube3D from './components/Cube3D.vue'
 import { useCube } from './composables/useCube'
 import { useSolver } from './composables/useSolver'
 import { useSavedConfigs } from './composables/useSavedConfigs'
@@ -220,6 +221,11 @@ async function handleImport(file: File) {
       </div>
     </section>
 
+    <!-- 3D-превью введённого состояния -->
+    <section class="preview3d">
+      <Cube3D :facelet="toKociemba()" :show-net="false" />
+    </section>
+
     <!-- Кнопки -->
     <section class="actions">
       <button class="btn btn-ghost" @click="handleReset">
@@ -390,6 +396,8 @@ h1 {
   gap: 5px;
   justify-content: center;
 }
+.preview3d { display: flex; justify-content: center; }
+
 .area-u { grid-area: u; }
 .area-l { grid-area: l; }
 .area-f { grid-area: f; }

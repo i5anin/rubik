@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, watch, onBeforeUnmount } from 'vue'
 import type { FaceLetter } from '../types/cube'
 import { useCube3D, inLayer, turnTransform, type Cubelet, type Dir } from '../composables/useCube3D'
+
+const props = withDefaults(defineProps<{
+  /** Mirror this solver facelet string (54 chars) instead of self-managing. */
+  facelet?: string
+  /** Show the 2D unfolded net under the cube. */
+  showNet?: boolean
+}>(), { facelet: undefined, showNet: true })
 
 const STEP = 46 // distance between cubelet centres (px)
 const FACES: { dir: Dir; t: string }[] = [
@@ -13,8 +20,11 @@ const FACES: { dir: Dir; t: string }[] = [
   { dir: 'L', t: 'rotateY(-90deg)' },
 ]
 
-const { cubelets, reset, applyMove, net } = useCube3D()
+const { cubelets, reset, applyMove, net, setFacelet } = useCube3D()
 const NET_FACES: FaceLetter[] = ['U', 'L', 'F', 'R', 'B', 'D']
+
+// When driven by a facelet prop (solver mode), mirror it reactively.
+watch(() => props.facelet, (s) => { if (s !== undefined) { setFacelet(s) } }, { immediate: true })
 
 // ── Orbit (drag to rotate the whole cube) ──────────────────────────────
 const rx = ref(-28)
@@ -164,7 +174,7 @@ function cubeletTransform(cl: Cubelet): string {
     <p class="hint-3d">{{ '↻ ' }}<span>покрути мышью</span></p>
 
     <!-- 2D unfolded net, in sync with the 3D model -->
-    <div class="net2d">
+    <div v-if="showNet" class="net2d">
       <div v-for="f in NET_FACES" :key="f" class="net-face" :class="`area-${f}`">
         <div v-for="(hex, i) in net[f]" :key="i" class="net-cell" :style="{ background: hex }" />
       </div>

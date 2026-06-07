@@ -167,14 +167,22 @@ export function inLayer(cl: Cubelet, face: FaceLetter): boolean {
   }
 }
 
-/** Rotation axis + sign for the CSS animation of a clockwise turn. */
+/**
+ * CSS rotation for the layer animation of a clockwise turn.
+ *
+ * The renderer flips Y (screen y = −model y, since model Y is up but CSS Y is
+ * down). That flip reverses the visual sense of rotations about the X and Z
+ * axes, so the CSS sign for R/L/F/B is the OPPOSITE of the model's rotateVec.
+ * Rotations about Y (U/D) are unaffected. Getting this wrong made the layer
+ * animate one way while the model committed the other — the visible snap.
+ */
 export function turnTransform(face: FaceLetter, angle: number): string {
   switch (face) {
     case 'U': return `rotateY(${-angle}deg)`
     case 'D': return `rotateY(${angle}deg)`
-    case 'R': return `rotateX(${-angle}deg)`
-    case 'L': return `rotateX(${angle}deg)`
-    case 'F': return `rotateZ(${-angle}deg)`
-    case 'B': return `rotateZ(${angle}deg)`
+    case 'R': return `rotateX(${angle}deg)`
+    case 'L': return `rotateX(${-angle}deg)`
+    case 'F': return `rotateZ(${angle}deg)`
+    case 'B': return `rotateZ(${-angle}deg)`
   }
 }

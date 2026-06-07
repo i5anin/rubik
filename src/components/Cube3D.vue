@@ -133,10 +133,6 @@ function cubeletTransform(cl: Cubelet): string {
       @pointerleave="onUp"
     >
       <div class="cube" :style="{ transform: `rotateX(${rx}deg) rotateY(${ry}deg)` }">
-        <!-- solid black core: fills the interior so gaps never show through -->
-        <div class="core">
-          <div v-for="f in FACES" :key="f.dir" class="core-face" :style="{ transform: `${f.t} translateZ(60px)` }" />
-        </div>
         <div
           v-for="cl in cubelets"
           :key="cl.id"
@@ -197,19 +193,6 @@ function cubeletTransform(cl: Cubelet): string {
   /* centre the cubelet coordinate system */
   display: grid;
   place-items: center;
-}
-
-/* Solid black interior block */
-.core {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  transform-style: preserve-3d;
-}
-.core-face {
-  position: absolute;
-  inset: 0;
-  background: #0a0a0a;
 }
 
 .cubelet {

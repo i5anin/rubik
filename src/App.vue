@@ -247,7 +247,9 @@ async function handleImport(file: File) {
       </button>
 
       <button class="btn btn-primary" :disabled="!validation.ok || solving" @click="handleSolve">
-        {{ solving ? t('btn.solving') : t('btn.solve') }} <Icon v-if="!solving" name="solve" />
+        <Icon v-if="solving" name="reset" class="spin" />
+        {{ solving ? t('btn.solving') : t('btn.solve') }}
+        <Icon v-if="!solving" name="solve" />
       </button>
     </section>
 
@@ -397,6 +399,10 @@ h1 {
   justify-content: center;
 }
 .preview3d { display: flex; justify-content: center; }
+
+/* spinner on the "solving…" button */
+.spin { animation: btn-spin 0.8s linear infinite; }
+@keyframes btn-spin { to { transform: rotate(360deg); } }
 
 .area-u { grid-area: u; }
 .area-l { grid-area: l; }

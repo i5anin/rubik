@@ -12,20 +12,22 @@
  */
 
 import { ref, computed } from 'vue'
-import Cube from '../lib/cubejs'
 import { FACE_ORDER } from '../types/cube'
 
-// ── Solver initialisation ─────────────────────────────────────────────────
+// ── Solver worker ──────────────────────────────────────────────────────────
+// Runs cubejs off the main thread so the UI never freezes, and so a hung
+// search on an unsolvable cube can be terminated by timeout.
 
-let solverReady = false
+interface SolveResult { ok: boolean; solution?: string; error?: string }
 
-async function ensureInit(): Promise<void> {
-  if (solverReady) { return }
-  // Defer the synchronous table build so the UI can render first.
-  await new Promise<void>(resolve => { setTimeout(resolve, 30) })
-  Cube.initSolver()
-  solverReady = true
+let worker: Worker | null = null
+
+function getWorker(): Worker {
+  worker ??= new Worker(new URL('../workers/solver.worker.ts', import.meta.url), { type: 'module' })
+  return worker
 }
+
+const SOLVE_TIMEOUT_MS = 5000
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 
@@ -58,17 +60,38 @@ export function useSolver() {
     rawSolution.value = null
     solveError.value  = null
 
-    try {
-      if (isAlreadySolved(kStr)) { rawSolution.value = ''; return }
-      await ensureInit()
-      rawSolution.value = Cube.fromString(kStr).solve()
-    } catch (e: unknown) {
-      solveError.value = e instanceof Error
-        ? e.message
-        : `Куб нерешаем (${String(e)})`
-    } finally {
-      solving.value = false
-    }
+    if (isAlreadySolved(kStr)) { rawSolution.value = ''; solving.value = false; return }
+
+    const w = getWorker()
+    await new Promise<void>((resolve) => {
+      const timeout = setTimeout(() => {
+        // hung search (likely an unsolvable hand-painted cube) — kill it
+        w.terminate()
+        worker = null
+        solveError.value = 'Не удалось решить за отведённое время — скорее всего, такая раскраска невозможна на настоящем кубе. Проверьте цвета.'
+        solving.value = false
+        resolve()
+      }, SOLVE_TIMEOUT_MS)
+
+      w.onmessage = (e: MessageEvent<SolveResult>): void => {
+        clearTimeout(timeout)
+        if (e.data.ok && e.data.solution !== undefined) {
+          rawSolution.value = e.data.solution
+        } else {
+          solveError.value = 'Куб нерешаем — проверьте раскраску (такое расположение цветов невозможно собрать).'
+        }
+        solving.value = false
+        resolve()
+      }
+      w.onerror = (): void => {
+        clearTimeout(timeout)
+        solveError.value = 'Ошибка решателя.'
+        solving.value = false
+        resolve()
+      }
+
+      w.postMessage(kStr)
+    })
   }
 
   function clear(): void {

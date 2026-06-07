@@ -42,8 +42,8 @@ type ColorKey      = `color.${FaceLetter}`
 type SubKey        = `sub.${FaceLetter}`
 type MoveLookKey   = `move.look.${FaceLetter}`
 type MoveActionKey = 'move.cw' | 'move.ccw' | 'move.two'
-type BtnKey        = `btn.${'reset' | 'scramble' | 'save' | 'saved' | 'solve' | 'solving'}`
-type ValidKey      = `valid.${'ok' | 'tooltip.title' | 'centers' | 'centers.ok' | 'parity' | 'parity.note'}`
+type BtnKey        = `btn.${'reset' | 'scramble' | 'save' | 'saved' | 'solve' | 'solving' | 'cancel'}`
+type ValidKey      = `valid.${'ok' | 'impossible' | 'tooltip.title' | 'centers' | 'centers.ok' | 'parity' | 'parity.note'}`
 type SolutionKey   = `solution.${'title' | 'done' | 'already'}` | `solution.move.${'1' | '2' | '5'}`
 type SavedKey      = `saved.${'title' | 'export' | 'import' | 'empty' | 'empty.hint' | 'load' | 'rename' | 'delete' | 'undo'}`
 type AlgoKey       = `algo.${'title' | 'author' | 'guarantee' | 'guarantee.v' | 'time' | 'lib' | 'desc' | 'notation'}` | `algo.notation.${'cw' | 'ccw' | '180'}`
@@ -105,9 +105,11 @@ const dict: Record<TranslationKey, DictEntry> = {
   'btn.saved':    { ru: 'Сохранено!', en: 'Saved!' },
   'btn.solve':    { ru: 'Решить',     en: 'Solve' },
   'btn.solving':  { ru: 'Считаю…',    en: 'Solving…' },
+  'btn.cancel':   { ru: 'Отмена',     en: 'Cancel' },
 
   // Validation
   'valid.ok':            { ru: 'Состояние корректно',   en: 'State is valid' },
+  'valid.impossible':    { ru: 'Невозможная раскраска (проверь углы и рёбра)', en: 'Impossible colouring (check corners & edges)' },
   'valid.tooltip.title': { ru: 'Что проверяется:',      en: 'Validation checks:' },
   'valid.centers':       { ru: 'Центры граней:',         en: 'Face centres:' },
   'valid.centers.ok':    { ru: 'зафиксированы',          en: 'locked' },

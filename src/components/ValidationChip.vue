@@ -9,6 +9,7 @@ const props = defineProps<{
   ok: boolean
   errorFace?: FaceLetter
   errorCount?: number
+  impossible?: boolean
   colorCounts: Record<FaceLetter, number>
 }>()
 
@@ -16,6 +17,7 @@ const show = ref(false)
 
 const chipMsg = computed(() => {
   if (props.ok) { return t('valid.ok') }
+  if (props.impossible) { return t('valid.impossible') }
   if (props.errorFace !== undefined && props.errorCount !== undefined) {
     return `${t(`color.${props.errorFace}`)}: ${props.errorCount}/9`
   }

@@ -21,12 +21,20 @@ import { useDocumentMeta } from './composables/useDocumentMeta'
 useDocumentMeta()
 
 const { faces, setCell, resetAll, toKociemba, fromKociemba, validation, colorCounts } = useCube()
-const { solve, solving, rawSolution, solveError, steps, clear } = useSolver()
+const { solve, cancel, solving, rawSolution, solveError, steps, clear } = useSolver()
 const { configs, save, remove, rename, exportJson, importJson } = useSavedConfigs()
 
 const mode = ref<'solver' | 'learn'>('solver')
 const activePaint = ref<FaceLetter>('R')
 const saveMsg = ref('')
+
+// Props for the validation chip, narrowed from the discriminated union.
+const chipProps = computed(() => {
+  const v = validation.value
+  if (v.ok) { return { ok: true } }
+  if ('impossible' in v) { return { ok: false, impossible: true } }
+  return { ok: false, errorFace: v.errorFace, errorCount: v.errorCount }
+})
 
 
 // Пошаговое выполнение
@@ -235,21 +243,17 @@ async function handleImport(file: File) {
         <Icon name="shuffle" /> {{ t('btn.scramble') }}
       </button>
 
-      <ValidationChip
-        :ok="validation.ok"
-        :error-face="validation.ok ? undefined : validation.errorFace"
-        :error-count="validation.ok ? undefined : validation.errorCount"
-        :color-counts="colorCounts"
-      />
+      <ValidationChip v-bind="chipProps" :color-counts="colorCounts" />
 
       <button class="btn btn-save" :disabled="!validation.ok" @click="handleSave">
         <Icon name="save" /> {{ saveMsg || t('btn.save') }}
       </button>
 
-      <button class="btn btn-primary" :disabled="!validation.ok || solving" @click="handleSolve">
-        <Icon v-if="solving" name="reset" class="spin" />
-        {{ solving ? t('btn.solving') : t('btn.solve') }}
-        <Icon v-if="!solving" name="solve" />
+      <button v-if="!solving" class="btn btn-primary" :disabled="!validation.ok" @click="handleSolve">
+        {{ t('btn.solve') }} <Icon name="solve" />
+      </button>
+      <button v-else class="btn btn-cancel" @click="cancel">
+        <Icon name="reset" class="spin" /> {{ t('btn.solving') }} — {{ t('btn.cancel') }}
       </button>
     </section>
 
@@ -436,6 +440,7 @@ h1 {
 .btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
 .btn-ghost    { background: #222; color: #bbb; }
+.btn-cancel   { background: #2a2a2a; color: #ffd60a; border: 1px solid #ffd60a55; }
 .btn-scramble { background: #2a2a2a; color: #ffd60a; border: 1px solid #444; }
 .btn-save     { background: #2a2a2a; color: #4895ef; border: 1px solid #444; }
 .btn-primary  { background: #e63946; color: #fff; }

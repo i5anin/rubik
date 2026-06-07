@@ -55,6 +55,9 @@ export function useSolver() {
   const rawSolution   = ref<string | null>(null)
   const solveError    = ref<string | null>(null)
 
+  // Lets the UI abort an in-flight (possibly hung) solve.
+  let cancelCurrent: (() => void) | null = null
+
   async function solve(kStr: string): Promise<void> {
     solving.value     = true
     rawSolution.value = null
@@ -64,14 +67,19 @@ export function useSolver() {
 
     const w = getWorker()
     await new Promise<void>((resolve) => {
+      const finish = (): void => { cancelCurrent = null; solving.value = false; resolve() }
       const timeout = setTimeout(() => {
-        // hung search (likely an unsolvable hand-painted cube) — kill it
-        w.terminate()
-        worker = null
+        w.terminate(); worker = null // hung search — kill it
         solveError.value = 'Не удалось решить за отведённое время — скорее всего, такая раскраска невозможна на настоящем кубе. Проверьте цвета.'
-        solving.value = false
-        resolve()
+        finish()
       }, SOLVE_TIMEOUT_MS)
+
+      // user-triggered cancel: stop the worker, no error message
+      cancelCurrent = (): void => {
+        clearTimeout(timeout)
+        w.terminate(); worker = null
+        finish()
+      }
 
       w.onmessage = (e: MessageEvent<SolveResult>): void => {
         clearTimeout(timeout)
@@ -80,18 +88,21 @@ export function useSolver() {
         } else {
           solveError.value = 'Куб нерешаем — проверьте раскраску (такое расположение цветов невозможно собрать).'
         }
-        solving.value = false
-        resolve()
+        finish()
       }
       w.onerror = (): void => {
         clearTimeout(timeout)
         solveError.value = 'Ошибка решателя.'
-        solving.value = false
-        resolve()
+        finish()
       }
 
       w.postMessage(kStr)
     })
+  }
+
+  /** Abort an in-progress solve (UI cancel button). */
+  function cancel(): void {
+    cancelCurrent?.()
   }
 
   function clear(): void {
@@ -104,5 +115,5 @@ export function useSolver() {
       .map((move, i) => ({ n: i + 1, move })),
   )
 
-  return { solve, solving, rawSolution, solveError, steps, clear }
+  return { solve, cancel, solving, rawSolution, solveError, steps, clear }
 }

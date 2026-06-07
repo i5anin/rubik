@@ -9,6 +9,7 @@
 import { reactive, computed } from 'vue'
 import type { FaceLetter } from '../types/cube'
 import { FACE_ORDER, CENTER_IDX } from '../types/cube'
+import { checkPieces } from '../lib/cubeValidity'
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 
@@ -69,12 +70,17 @@ export function useCube() {
     readonly ok:         false
     readonly errorFace:  FaceLetter
     readonly errorCount: number
+  } | {
+    readonly ok:         false
+    readonly impossible: true
   }>(() => {
     const s = toKociemba()
     for (const face of FACE_ORDER) {
       const count = countChar(s, face)
       if (count !== 9) { return { ok: false, errorFace: face, errorCount: count } }
     }
+    // colour counts fine → check that every corner/edge is a possible piece
+    if (!checkPieces(s).ok) { return { ok: false, impossible: true } }
     return { ok: true }
   })
 

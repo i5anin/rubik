@@ -67,7 +67,7 @@ const rows = computed(() =>
         </div>
         <div class="tt-footer" style="margin-top:3px">
           <span>{{ t('valid.parity') }}</span>
-          <span class="tt-note">{{ t('valid.parity.note') }}</span>
+          <span class="tt-ok">{{ t('valid.parity.note') }}</span>
         </div>
       </div>
     </Transition>

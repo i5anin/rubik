@@ -9,7 +9,7 @@
 import { reactive, computed } from 'vue'
 import type { FaceLetter } from '../types/cube'
 import { FACE_ORDER, CENTER_IDX } from '../types/cube'
-import { checkPieces } from '../lib/cubeValidity'
+import { checkSolvable } from '../lib/cubeValidity'
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 
@@ -79,8 +79,8 @@ export function useCube() {
       const count = countChar(s, face)
       if (count !== 9) { return { ok: false, errorFace: face, errorCount: count } }
     }
-    // colour counts fine → check that every corner/edge is a possible piece
-    if (!checkPieces(s).ok) { return { ok: false, impossible: true } }
+    // colour counts fine → full solvability check (piece colours + parity)
+    if (!checkSolvable(s).ok) { return { ok: false, impossible: true } }
     return { ok: true }
   })
 

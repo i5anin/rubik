@@ -109,12 +109,12 @@ const dict: Record<TranslationKey, DictEntry> = {
 
   // Validation
   'valid.ok':            { ru: 'Состояние корректно',   en: 'State is valid' },
-  'valid.impossible':    { ru: 'Невозможная раскраска (проверь углы и рёбра)', en: 'Impossible colouring (check corners & edges)' },
+  'valid.impossible':    { ru: 'Невозможно собрать — такая раскраска не получается на настоящем кубе', en: 'Unsolvable — this colouring can’t occur on a real cube' },
   'valid.tooltip.title': { ru: 'Что проверяется:',      en: 'Validation checks:' },
   'valid.centers':       { ru: 'Центры граней:',         en: 'Face centres:' },
   'valid.centers.ok':    { ru: 'зафиксированы',          en: 'locked' },
-  'valid.parity':        { ru: 'Чётность перестановок:', en: 'Permutation parity:' },
-  'valid.parity.note':   { ru: 'проверяет солвер',       en: 'checked by solver' },
+  'valid.parity':        { ru: 'Чётность и углы/рёбра:', en: 'Parity & pieces:' },
+  'valid.parity.note':   { ru: '✓ проверено',            en: '✓ checked' },
 
   // Solution
   'solution.title':   { ru: 'Решение',                en: 'Solution' },

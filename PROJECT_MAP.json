@@ -1,0 +1,1282 @@
+{
+  "schemaVersion": 1,
+  "snapshot": "2026-10-30T14:47:11.360Z",
+  "project": "rubik",
+  "root": ".",
+  "method": "static-local-index",
+  "limitations": [
+    "Нет динамических вызовов и сетевых интеграций",
+    "Сверять sha256 и evidence.line с текущими исходниками",
+    "Наличие зависимости не доказывает работоспособность"
+  ],
+  "nodes": [
+    {
+      "id": "project:rubik",
+      "type": "project",
+      "name": "rubik"
+    },
+    {
+      "id": "project:rubik/file:README.md",
+      "type": "file",
+      "path": "README.md",
+      "sha256": "872c6a45af5aeb138f1fcc9b82c869c0a712c05580a3706c7b61d04ae6391183",
+      "bytes": 5994
+    },
+    {
+      "id": "project:rubik/file:README.ru.md",
+      "type": "file",
+      "path": "README.ru.md",
+      "sha256": "17cbabefac056d4d52b559640b1dc85b02df854589b5bb1e4ac9ae70488bb721",
+      "bytes": 8993
+    },
+    {
+      "id": "project:rubik/file:eslint.config.ts",
+      "type": "file",
+      "path": "eslint.config.ts",
+      "sha256": "c9046c6e56e48bc6bbe81921167683523fe4f3e8c733af23ba83fa84d8fca704",
+      "bytes": 4422
+    },
+    {
+      "id": "project:rubik/file:package.json",
+      "type": "file",
+      "path": "package.json",
+      "sha256": "c54de2dd343085e8d5a0e7ef80bec40b13e06f7c154d79f07e95d2492541c582",
+      "bytes": 681
+    },
+    {
+      "id": "project:rubik/file:src/App.vue",
+      "type": "file",
+      "path": "src/App.vue",
+      "sha256": "1e4225a2329dc4265c280ab2b6d2c93a3ebe52bd37a0459d3efee97a39243472",
+      "bytes": 14544
+    },
+    {
+      "id": "project:rubik/file:src/components/AlgoInfo.vue",
+      "type": "file",
+      "path": "src/components/AlgoInfo.vue",
+      "sha256": "acd3f94d7627b31228f2d9c1ce5e4707ae0c9e6471ffed66e41bfe2c4094f8ad",
+      "bytes": 3224
+    },
+    {
+      "id": "project:rubik/file:src/components/Cube3D.vue",
+      "type": "file",
+      "path": "src/components/Cube3D.vue",
+      "sha256": "de57644ec7f562b352357ad422e9dc7d57d226a42f0d680f5ddd071ac388edc9",
+      "bytes": 8881
+    },
+    {
+      "id": "project:rubik/file:src/components/FaceGrid.vue",
+      "type": "file",
+      "path": "src/components/FaceGrid.vue",
+      "sha256": "0fb6d632719c55cc97b2d91c638f9caa60bccd34a557274d570453f31daaf1f4",
+      "bytes": 7343
+    },
+    {
+      "id": "project:rubik/file:src/components/HeaderLinks.vue",
+      "type": "file",
+      "path": "src/components/HeaderLinks.vue",
+      "sha256": "aed22b36072fa8f4f71ccd7075aa32b2d8fdffb182518b3c7e445084856c5a3f",
+      "bytes": 4643
+    },
+    {
+      "id": "project:rubik/file:src/components/Icon.vue",
+      "type": "file",
+      "path": "src/components/Icon.vue",
+      "sha256": "43dedb1a822abbad2dfaff4bb6e7f109a50f533f303d779733f9a73705ae35dc",
+      "bytes": 2810
+    },
+    {
+      "id": "project:rubik/file:src/components/Learn.vue",
+      "type": "file",
+      "path": "src/components/Learn.vue",
+      "sha256": "601eb277b3710a2859297d7811150acd6c218f61117072f5744211e4ae3e0739",
+      "bytes": 11342
+    },
+    {
+      "id": "project:rubik/file:src/components/SavedConfigs.vue",
+      "type": "file",
+      "path": "src/components/SavedConfigs.vue",
+      "sha256": "fb6f07ad331a734f64cd9928c82dfbc5d0e50157e87015bc7c2211a59d402020",
+      "bytes": 5057
+    },
+    {
+      "id": "project:rubik/file:src/components/SolutionPanel.vue",
+      "type": "file",
+      "path": "src/components/SolutionPanel.vue",
+      "sha256": "d7ef8037f341363d28c3152443376a4626920b244735e7837598d78404b28716",
+      "bytes": 6254
+    },
+    {
+      "id": "project:rubik/file:src/components/ValidationChip.vue",
+      "type": "file",
+      "path": "src/components/ValidationChip.vue",
+      "sha256": "871cdfbcfd874f61cc4c0ff35bec8ed3380eb30e724d4df4c44ea28e1ebd0ab3",
+      "bytes": 4361
+    },
+    {
+      "id": "project:rubik/file:src/composables/useCube.ts",
+      "type": "file",
+      "path": "src/composables/useCube.ts",
+      "sha256": "0192c43f1c5877848c4c7c3aa5c598d292679b1f60b6ec2dc02493b9934abab4",
+      "bytes": 3657
+    },
+    {
+      "id": "project:rubik/file:src/composables/useCube3D.ts",
+      "type": "file",
+      "path": "src/composables/useCube3D.ts",
+      "sha256": "ed79389b6ffb3980f9a39446fc85b83a2592c92eb61d821036abbe94caa778a5",
+      "bytes": 7032
+    },
+    {
+      "id": "project:rubik/file:src/composables/useDocumentMeta.ts",
+      "type": "file",
+      "path": "src/composables/useDocumentMeta.ts",
+      "sha256": "5919a2d5b726cb72c5b2855c04b5fa9ef6bd929dd197eb5d08c7746bc15fdfaf",
+      "bytes": 1355
+    },
+    {
+      "id": "project:rubik/file:src/composables/useSavedConfigs.ts",
+      "type": "file",
+      "path": "src/composables/useSavedConfigs.ts",
+      "sha256": "8302c4fbe63f7b85b15c023de491a48292989166ef5efd2bc16fbe8da05a6185",
+      "bytes": 2534
+    },
+    {
+      "id": "project:rubik/file:src/composables/useSolver.ts",
+      "type": "file",
+      "path": "src/composables/useSolver.ts",
+      "sha256": "af2bfac4fd1bc249935441589fe484e8afeace1ef445f3383dad5191b5d47c15",
+      "bytes": 4638
+    },
+    {
+      "id": "project:rubik/file:src/config.ts",
+      "type": "file",
+      "path": "src/config.ts",
+      "sha256": "d7bff57410bc7a280557bd76f5405814916b95ea1f74faac273c9cb2742a1cd6",
+      "bytes": 241
+    },
+    {
+      "id": "project:rubik/file:src/directives/tooltip.ts",
+      "type": "file",
+      "path": "src/directives/tooltip.ts",
+      "sha256": "a0b7a9cad4831099a7bb6041486f687fa5f6b33f1888a4e02f266cb73d426e65",
+      "bytes": 2529
+    },
+    {
+      "id": "project:rubik/file:src/i18n.ts",
+      "type": "file",
+      "path": "src/i18n.ts",
+      "sha256": "7b2f90045de989858c8188da430865c051f6c0bec7d45fcf90a0f08e2ea0f6ba",
+      "bytes": 11821
+    },
+    {
+      "id": "project:rubik/file:src/lib/cubeValidity.ts",
+      "type": "file",
+      "path": "src/lib/cubeValidity.ts",
+      "sha256": "d44fa72e2ed5e1b62f9aaf3692264faf4819194cae82d789d60cdfd357cf8865",
+      "bytes": 6214
+    },
+    {
+      "id": "project:rubik/file:src/lib/cubejs.ts",
+      "type": "file",
+      "path": "src/lib/cubejs.ts",
+      "sha256": "59fa09e376bb31b1e9a1cef6814b39585c266caf1703625d7db9a65d38addaa2",
+      "bytes": 795
+    },
+    {
+      "id": "project:rubik/file:src/main.ts",
+      "type": "file",
+      "path": "src/main.ts",
+      "sha256": "e8bafd03c39ebb6ab39813911165932aed60f96e00d9df6c0d5aacdf7aef5b07",
+      "bytes": 434
+    },
+    {
+      "id": "project:rubik/file:src/shims.d.ts",
+      "type": "file",
+      "path": "src/shims.d.ts",
+      "sha256": "69c636f3ae018441c120497d6e09adecbc786ad4d4d9ffb4fbd7cc531fff88ee",
+      "bytes": 92
+    },
+    {
+      "id": "project:rubik/file:src/types/cube.ts",
+      "type": "file",
+      "path": "src/types/cube.ts",
+      "sha256": "147e688c8aea8642b0d3d003933817303e5486804ae43d01f7c92587cc25674d",
+      "bytes": 1316
+    },
+    {
+      "id": "project:rubik/file:src/types/cubejs.d.ts",
+      "type": "file",
+      "path": "src/types/cubejs.d.ts",
+      "sha256": "b83704670f8365d2156f7f081eccc87ae0f306b7c5e9bb3a5009f96fffe71292",
+      "bytes": 736
+    },
+    {
+      "id": "project:rubik/file:src/workers/solver.worker.ts",
+      "type": "file",
+      "path": "src/workers/solver.worker.ts",
+      "sha256": "edc7bed728d2ff5ca6a6b02bf15ee1a398f5c390b4bc4c4307584cd8559774ed",
+      "bytes": 864
+    },
+    {
+      "id": "project:rubik/file:vite.config.ts",
+      "type": "file",
+      "path": "vite.config.ts",
+      "sha256": "08e429650275c95336689daed40030829d2b750e732e06c40294833f77e42a7a",
+      "bytes": 2348
+    },
+    {
+      "id": "package:npm:@vercel/analytics",
+      "type": "package",
+      "name": "@vercel/analytics",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:cubejs",
+      "type": "package",
+      "name": "cubejs",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:vue",
+      "type": "package",
+      "name": "vue",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:@eslint/js",
+      "type": "package",
+      "name": "@eslint/js",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:@vitejs/plugin-vue",
+      "type": "package",
+      "name": "@vitejs/plugin-vue",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:eslint",
+      "type": "package",
+      "name": "eslint",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:eslint-plugin-vue",
+      "type": "package",
+      "name": "eslint-plugin-vue",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:globals",
+      "type": "package",
+      "name": "globals",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:jiti",
+      "type": "package",
+      "name": "jiti",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:typescript",
+      "type": "package",
+      "name": "typescript",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:typescript-eslint",
+      "type": "package",
+      "name": "typescript-eslint",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:vite",
+      "type": "package",
+      "name": "vite",
+      "ecosystem": "npm"
+    },
+    {
+      "id": "package:npm:vue-tsc",
+      "type": "package",
+      "name": "vue-tsc",
+      "ecosystem": "npm"
+    }
+  ],
+  "edges": [
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:README.md",
+      "relation": "contains",
+      "evidence": {
+        "path": "README.md"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:README.ru.md",
+      "relation": "contains",
+      "evidence": {
+        "path": "README.ru.md"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:eslint.config.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "eslint.config.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:package.json",
+      "relation": "contains",
+      "evidence": {
+        "path": "package.json"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/App.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/App.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/components/AlgoInfo.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/components/AlgoInfo.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/components/Cube3D.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/components/Cube3D.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/components/FaceGrid.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/components/FaceGrid.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/components/HeaderLinks.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/components/HeaderLinks.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/components/Icon.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/components/Icon.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/components/Learn.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/components/Learn.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/components/SavedConfigs.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/components/SavedConfigs.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/components/SolutionPanel.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/components/SolutionPanel.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/components/ValidationChip.vue",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/components/ValidationChip.vue"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/composables/useCube.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/composables/useCube.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/composables/useCube3D.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/composables/useCube3D.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/composables/useDocumentMeta.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/composables/useDocumentMeta.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/composables/useSavedConfigs.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/composables/useSavedConfigs.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/composables/useSolver.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/composables/useSolver.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/config.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/config.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/directives/tooltip.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/directives/tooltip.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/i18n.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/lib/cubeValidity.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/lib/cubeValidity.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/lib/cubejs.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/lib/cubejs.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/main.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/main.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/shims.d.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/shims.d.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/types/cube.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/types/cubejs.d.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/types/cubejs.d.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:src/workers/solver.worker.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "src/workers/solver.worker.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik",
+      "target": "project:rubik/file:vite.config.ts",
+      "relation": "contains",
+      "evidence": {
+        "path": "vite.config.ts"
+      },
+      "method": "filesystem"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/lib/cubejs.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 3
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 5
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 6
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/config.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 7
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/components/FaceGrid.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 8
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/components/SolutionPanel.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 9
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/components/SavedConfigs.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 10
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/components/HeaderLinks.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 11
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/components/ValidationChip.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 12
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/components/Icon.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 13
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/components/Learn.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 14
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/components/Cube3D.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 15
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/composables/useCube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 16
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/composables/useSolver.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 17
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/composables/useSavedConfigs.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 18
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/App.vue",
+      "target": "project:rubik/file:src/composables/useDocumentMeta.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/App.vue",
+        "line": 19
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/i18n.ts",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/i18n.ts",
+        "line": 13
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/main.ts",
+      "target": "project:rubik/file:src/App.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/main.ts",
+        "line": 3
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/main.ts",
+      "target": "project:rubik/file:src/directives/tooltip.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/main.ts",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/AlgoInfo.vue",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/AlgoInfo.vue",
+        "line": 3
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/AlgoInfo.vue",
+      "target": "project:rubik/file:src/components/Icon.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/AlgoInfo.vue",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/Cube3D.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/Cube3D.vue",
+        "line": 3
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/Cube3D.vue",
+      "target": "project:rubik/file:src/composables/useCube3D.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/Cube3D.vue",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/FaceGrid.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/FaceGrid.vue",
+        "line": 3
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/FaceGrid.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/FaceGrid.vue",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/FaceGrid.vue",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/FaceGrid.vue",
+        "line": 5
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/HeaderLinks.vue",
+      "target": "project:rubik/file:src/config.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/HeaderLinks.vue",
+        "line": 3
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/HeaderLinks.vue",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/HeaderLinks.vue",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/HeaderLinks.vue",
+      "target": "project:rubik/file:src/components/AlgoInfo.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/HeaderLinks.vue",
+        "line": 5
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/Learn.vue",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/Learn.vue",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/Learn.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/Learn.vue",
+        "line": 5
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/Learn.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/Learn.vue",
+        "line": 6
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/Learn.vue",
+      "target": "project:rubik/file:src/components/Icon.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/Learn.vue",
+        "line": 7
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/Learn.vue",
+      "target": "project:rubik/file:src/components/Cube3D.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/Learn.vue",
+        "line": 8
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/SavedConfigs.vue",
+      "target": "project:rubik/file:src/composables/useSavedConfigs.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/SavedConfigs.vue",
+        "line": 3
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/SavedConfigs.vue",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/SavedConfigs.vue",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/SavedConfigs.vue",
+      "target": "project:rubik/file:src/components/Icon.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/SavedConfigs.vue",
+        "line": 5
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/SolutionPanel.vue",
+      "target": "project:rubik/file:src/composables/useSolver.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/SolutionPanel.vue",
+        "line": 3
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/SolutionPanel.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/SolutionPanel.vue",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/SolutionPanel.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/SolutionPanel.vue",
+        "line": 5
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/SolutionPanel.vue",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/SolutionPanel.vue",
+        "line": 6
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/SolutionPanel.vue",
+      "target": "project:rubik/file:src/components/Icon.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/SolutionPanel.vue",
+        "line": 7
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/ValidationChip.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/ValidationChip.vue",
+        "line": 3
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/ValidationChip.vue",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/ValidationChip.vue",
+        "line": 4
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/ValidationChip.vue",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/ValidationChip.vue",
+        "line": 5
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/components/ValidationChip.vue",
+      "target": "project:rubik/file:src/components/Icon.vue",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/components/ValidationChip.vue",
+        "line": 6
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/composables/useCube.ts",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/composables/useCube.ts",
+        "line": 10
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/composables/useCube.ts",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/composables/useCube.ts",
+        "line": 11
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/composables/useCube.ts",
+      "target": "project:rubik/file:src/lib/cubeValidity.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/composables/useCube.ts",
+        "line": 12
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/composables/useCube3D.ts",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/composables/useCube3D.ts",
+        "line": 13
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/composables/useCube3D.ts",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/composables/useCube3D.ts",
+        "line": 14
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/composables/useDocumentMeta.ts",
+      "target": "project:rubik/file:src/i18n.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/composables/useDocumentMeta.ts",
+        "line": 11
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/composables/useSolver.ts",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/composables/useSolver.ts",
+        "line": 15
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/lib/cubeValidity.ts",
+      "target": "project:rubik/file:src/types/cube.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/lib/cubeValidity.ts",
+        "line": 14
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:src/workers/solver.worker.ts",
+      "target": "project:rubik/file:src/lib/cubejs.ts",
+      "relation": "imports_local",
+      "evidence": {
+        "path": "src/workers/solver.worker.ts",
+        "line": 11
+      },
+      "method": "lexical-existing-file"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:@vercel/analytics",
+      "relation": "declares_dependency",
+      "kind": "dependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 13
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:cubejs",
+      "relation": "declares_dependency",
+      "kind": "dependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 14
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:vue",
+      "relation": "declares_dependency",
+      "kind": "dependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 15
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:@eslint/js",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 18
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:@vitejs/plugin-vue",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 19
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:eslint",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 20
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:eslint-plugin-vue",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 21
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:globals",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 22
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:jiti",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 23
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:typescript",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 24
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:typescript-eslint",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 25
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:vite",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 6
+      },
+      "method": "manifest"
+    },
+    {
+      "source": "project:rubik/file:package.json",
+      "target": "package:npm:vue-tsc",
+      "relation": "declares_dependency",
+      "kind": "devDependencies",
+      "evidence": {
+        "path": "package.json",
+        "line": 27
+      },
+      "method": "manifest"
+    }
+  ]
+}
